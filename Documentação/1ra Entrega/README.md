@@ -47,21 +47,6 @@ O sistema recolhe dados através de sensores instalados, envia‑os para um serv
 
 # 3. Guiões de Teste (versão preliminar)
 
-### **Guião 1 – Registo de Entrada na Sala**
-
-1. O utilizador aproxima o cartão RFID do leitor.
-2. O sistema lê o ID.
-3. O ESP32 envia o evento "entrada" para a API REST.
-4. A API grava o evento na base de dados.
-5. O dashboard mostra o nome do utilizador e timestamp.
-
-### **Guião 2 – Alerta de Temperatura Elevada**
-
-1. O sensor lê uma temperatura acima do limite.
-2. O ESP32 envia o valor para a API.
-3. A API regista o valor e atualiza o estado.
-4. O sistema ativa um alerta visual e sonoro.
-5. A aplicação mostra aviso de temperatura crítica.
 
 ---
 
@@ -97,21 +82,24 @@ O sistema recolhe dados através de sensores instalados, envia‑os para um serv
 
 ## **Hardware (preliminar)**
 
-* 1x ESP32
-* Sensor de temperatura/humidade DHT22
-* Sensor PIR
-* Módulo RFID/NFC
-* Sensor magnético de porta
-* Buzzer / LED de alerta
-* Breadboard, jumpers e alimentação
+* Esp32 Dev Kit
+* Breadboard 
+* Oled
+* Motion Sensor
+* Humidity and Temperature module
+* Buzzer
+* Led RGB
+* 3 Resistências 220A
+* 8 Cabos Dupont F-M
+* 8 Cabos Dupont M-M
+* Computador
+* Futura Possivel adição Botão onde inclui botão físico, resistência 10k e dois fios de lição a 3v e ground.
 
 ## **Software**
 
-* Arduino IDE / PlatformIO
-* Node.js / Python para API REST
-* MySQL ou MariaDB
-* Biblioteca Pandas e Scikit‑Learn (IA)
-* GitHub
+* Arduino Ide
+* Python ide
+* Base de Dados
 
 ---
 
@@ -172,4 +160,153 @@ O sistema recolhe dados através de sensores instalados, envia‑os para um serv
 
 ---
 
+# 10. Requisitos Funcionais (RF)
+## **Tabela de Requisitos Funcionais**
+ID	Categoria	Prioridade	Descrição
+RF01	Monitorizar	Alta	O sistema deverá detetar a presença de pessoas na sala através do sensor de movimento (PIR).
+RF02	Monitorizar	Alta	O sistema deverá medir a temperatura e a humidade ambiente em intervalos regulares ou definidos pelo gestor da segurança.
+RF03	Interface OLED	Média	O sistema mostrará no ecrã OLED os valores atuais de temperatura, humidade e o estado da sala.
+RF04	Alarme	Alta	O sistema ativará o buzzer quando for detetada uma condição de alarme (intrusão ou limites excedidos).
+RF05	Sinalização	Alta	O sistema indicará o estado da sala através do LED RGB (verde = normal, vermelho = alarme, azul = standby/configuração).
+RF06	Comunicação	Alta	O sistema deve enviar periodicamente para o computador/base de dados as leituras e eventos.
+RF07	Armazenamento	Alta	A aplicação deve guardar na base de dados as leituras e eventos recebidos do ESP32.
+RF08	Consulta	Média	A aplicação deve permitir consultar o histórico de leituras e eventos por data/hora.
+RF09	Gestão	Média	O utilizador deverá conseguir desativar temporariamente o alarme através de botão físico ou comando na aplicação.
 
+Nota: Requisitos com prioridade Alta são considerados essenciais; prioridades Média correspondem a funcionalidades “good to have”.
+
+# 11. Requisitos Não Funcionais (RNF)
+## **Tabela de Requisitos Não Funcionais**
+ID	Categoria	Prioridade	Descrição
+RNF01	Desempenho	Alta	O sistema deve atualizar leitura de temperatura/humidade a cada 2–5s e reagir a detecção de movimento em <1s.
+RNF02	Fiabilidade	Alta	O sistema deve funcionar continuamente entre 8 a 24 horas sem reiniciar.
+RNF03	Usabilidade	Média	As mensagens no OLED devem ser claras e legíveis, com abreviações simples.
+RNF04	Segurança	Alta	A comunicação deve ser realizada em rede protegida e sem credenciais expostas em texto simples.
+RNF05	Integridade dos Dados	Alta	A aplicação Python deve garantir que todas as mensagens válidas são registadas sem perda.
+RNF06	Manutenção	Média	O código deve ser modular para facilitar alterações futuras, especialmente no Arduino.
+RNF07	Portabilidade	Média	A aplicação deve poder ser executada em qualquer computador com Python e acesso à BD.
+RNF08	Escalabilidade	Baixa/Média	A arquitetura deve permitir adicionar novos sensores/atuadores sem grandes alter
+
+# 12. Lista de Componentes IoT - Sensores, Atuadores, Controladores e Interface
+
+## 1. Microcontrolador
+
+### ESP32 Dev Kit
+- **Tipo:** Microcontrolador com Wi-Fi e Bluetooth integrados  
+- **Descrição:**  
+  O ESP32 é o dispositivo central do sistema. Executa o código que lê sensores, processa a lógica de decisão, controla atuadores e gere a comunicação com o computador.  
+- **Função no projeto:**  
+  - Recolher dados (PIR, DHT)  
+  - Controlar atuadores (LED RGB, buzzer, OLED)  
+  - Enviar dados via Wi-Fi/cabo para a aplicação/base de dados  
+  - Garantir a lógica de alarme e da monitorização  
+
+---
+
+## 2. Sensores
+
+### 2.1 Sensor PIR (Passive Infrared Sensor)
+- **Tipo:** Sensor de movimento e presença  
+- **Descrição:**  
+  Deteta variações de radiação infravermelha emitida pelo corpo humano. Só deteta movimento, não identifica pessoas.  
+- **Função no projeto:**  
+  - Detetar presença na sala  
+  - Acionar o alarme  
+  - Atualizar o estado da sala  
+
+### 2.2 Sensor DHT11 (Temperatura e Humidade)
+- **Tipo:** Sensor ambiental digital  
+- **Descrição:**  
+  Sensor capaz de medir temperatura (0–50°C) e humidade (20–80%). Usa protocolo digital próprio e comunica diretamente com o ESP32.  
+- **Função no projeto:**  
+  - Medir temperatura ambiente  
+  - Medir humidade relativa  
+  - Permitir registar e monitorizar condições da sala  
+  - Acionar alarme caso os valores passem limites (quando definido)  
+
+---
+
+## 3. Atuadores
+
+### 3.1 Buzzer (Alarme)
+- **Tipo:** Atuador sonoro  
+- **Descrição:**  
+  Componente que produz som quando recebe sinal elétrico. Pode emitir som simples ou alertas automáticos.  
+- **Função no projeto:**  
+  - Produzir alarme sonoro em caso de intrusão  
+  - Avisar o utilizador quando ocorre um evento relevante  
+  - Reforçar os estados críticos do sistema  
+
+### 3.2 LED RGB
+- **Tipo:** Atuador luminoso  
+- **Descrição:**  
+  LED com três canais (Vermelho, Verde, Azul) que permite criar várias cores combinadas.  
+- **Função no projeto:**  
+  - Indicar estados do sistema:  
+    - Verde: normal  
+    - Vermelho: alarme  
+    - Azul: standby ou configuração (possível mudança para algo mais relevante)  
+  - Dar feedback visual ao utilizador  
+
+### 3.3 Ecrã OLED 0.96" (I2C)
+- **Tipo:** Dispositivo de interface / output  
+- **Descrição:**  
+  Ecrã monocromático de baixa potência, controlado via I2C, ideal para mostrar texto ou pequenos gráficos.  
+- **Função no projeto:**  
+  - Mostrar temperatura e humidade  
+  - Mostrar estado da sala (presença / ausência)  
+  - Mostrar notificações  
+
+---
+
+## 4. Interface e Conectividade
+
+### 4.1 Módulo Wi-Fi (nativo no ESP32)
+- **Tipo:** Comunicação wireless  
+- **Descrição:**  
+  Comunicação Wi-Fi integrada no ESP32, compatível com protocolos TCP, UDP, HTTP, MQTT.  
+- **Função no projeto:**  
+  - Enviar dados para o computador / servidor  
+  - Permitir conectividade com a base de dados  
+  - Suportar dashboards ou monitorização remota  
+
+---
+
+## 5. Componentes de Suporte (auxiliares)
+
+### 5.1 Breadboard
+- **Tipo:** Placa de prototipagem  
+- **Descrição:**  
+  Superfície que permite montar circuitos sem soldar.  
+- **Função no projeto:**  
+  - Ligar sensores e atuadores de forma modular  
+  - Facilitar testes e alterações rápidas  
+
+### 5.2 Cabos Dupont (M/M, M/F, F/F)
+- **Tipo:** Cabos de ligação  
+- **Descrição:**  
+  Cabos usados para conectar o ESP32 aos sensores, atuadores e breadboard.  
+- **Função no projeto:**  
+  - Interligar todos os componentes eletrónicos  
+  - Assegurar ligações estáveis e seguras  
+
+### 5.3 Resistores
+- **Tipo:** Componentes eletrónicos passivos  
+- **Descrição:**  
+  Limitam corrente elétrica, essenciais para proteger LEDs ou garantir leitura estável do buzzer.  
+- **Função no projeto:**  
+  - Evitar danos no LED RGB  
+  - Ajustar níveis de tensão quando necessário  
+
+---
+
+# Lista de Software
+
+| Software | Descrição |
+|----------|-----------|
+| Arduino IDE | Ambiente de desenvolvimento usado para programar o ESP32. Desenvolver, compilar e enviar código para o ESP32. |
+| Bibliotecas Arduino (Adafruit_SSD1306, DHT, Wire, etc.) | Conjunto de bibliotecas para sensores e ecrã OLED. Permitem usar facilmente o OLED, DHT11 e I2C. |
+| Python | Usado para scripts de comunicação, BD e dashboard. Receber dados do ESP32, processar, guardar e mostrar ao utilizador. |
+| Biblioteca Python: sqlite3 / MySQL / outro | Base de dados que permite guardar dados persistentes. Armazenar leituras (temperatura/humidade/movimento) e eventos (alarme). |
+| Driver USB do ESP32 | Driver de comunicação serial com o microcontrolador. Permite programar o ESP32 via cabo USB. |
+| Sistema Operativo (Windows / Linux) | Sistema onde correm Python e Arduino IDE. Execução da aplicação e suporte à programação. |
