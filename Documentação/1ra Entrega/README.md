@@ -8,8 +8,8 @@
 
 ## Elementos do Grupo
 
-*Alejandro Agrela 20231626
-Bionda Mateus 20231666
+*Alejandro Agrela 20231626,
+Bionda Mateus 20231666,
 César Pinto 20231626*
 
 ## Unidades Curriculares Envolvidas
