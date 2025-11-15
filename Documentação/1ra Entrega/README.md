@@ -1,8 +1,6 @@
 # Proposta Inicial do Projeto
 
-## Universidade / Faculdade
-
-**[Inserir universidade e faculdade]**
+## Universidade **IADE**
 
 ## Projeto
 
@@ -10,9 +8,9 @@
 
 ## Elementos do Grupo
 
-* Nome 1 (número)
-* Nome 2 (número)
-* Nome 3 (número)
+*Alejandro Agrela 20231626
+*Bionda Mateus 20231666
+*César Pinto 20231626 
 
 ## Unidades Curriculares Envolvidas
 
@@ -27,7 +25,7 @@ IoT, ESP32, Segurança, Sensores, Automação, Monitorização, IA, REST API
 
 ## Repositório GitHub
 
-[Link para o repositório]
+[https://github.com/Engalion/PBL-Semestre-5-Grupo-3]
 
 ---
 
@@ -174,9 +172,4 @@ O sistema recolhe dados através de sensores instalados, envia‑os para um serv
 
 ---
 
-# 10. Distribuição de Tarefas (Previsão)
-
-* Elemento 1 → ESP32 + sensores
-* Elemento 2 → API + BD
-* Elemento 3 → IA + documentação
 
