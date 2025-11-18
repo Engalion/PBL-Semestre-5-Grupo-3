@@ -10,7 +10,7 @@
 
 *Alejandro Agrela 20231626,
 Bionda Mateus 20231666,
-César Pinto 20231626*
+César Pinto 20231615*
 
 ## Unidades Curriculares Envolvidas
 
