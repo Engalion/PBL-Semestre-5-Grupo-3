@@ -156,36 +156,38 @@ O sistema recolhe dados através de sensores instalados, envia‑os para um serv
 * T8 — Testes
 * T9 — Documentação e apresentação
 
-*(Gráfico de Gantt será inserido quando concluído.)*
+<img width="954" height="572" alt="image" src="https://github.com/user-attachments/assets/c4d4e160-37d7-413a-ab15-e92961f732c7" />
 
----
 
-# 10. Requisitos Funcionais (RF)
-## **Tabela de Requisitos Funcionais**
-ID	Categoria	Prioridade	Descrição
-RF01	Monitorizar	Alta	O sistema deverá detetar a presença de pessoas na sala através do sensor de movimento (PIR).
-RF02	Monitorizar	Alta	O sistema deverá medir a temperatura e a humidade ambiente em intervalos regulares ou definidos pelo gestor da segurança.
-RF03	Interface OLED	Média	O sistema mostrará no ecrã OLED os valores atuais de temperatura, humidade e o estado da sala.
-RF04	Alarme	Alta	O sistema ativará o buzzer quando for detetada uma condição de alarme (intrusão ou limites excedidos).
-RF05	Sinalização	Alta	O sistema indicará o estado da sala através do LED RGB (verde = normal, vermelho = alarme, azul = standby/configuração).
-RF06	Comunicação	Alta	O sistema deve enviar periodicamente para o computador/base de dados as leituras e eventos.
-RF07	Armazenamento	Alta	A aplicação deve guardar na base de dados as leituras e eventos recebidos do ESP32.
-RF08	Consulta	Média	A aplicação deve permitir consultar o histórico de leituras e eventos por data/hora.
-RF09	Gestão	Média	O utilizador deverá conseguir desativar temporariamente o alarme através de botão físico ou comando na aplicação.
+## 10. Requisitos Funcionais (RF)
 
-Nota: Requisitos com prioridade Alta são considerados essenciais; prioridades Média correspondem a funcionalidades “good to have”.
+> **Prioridade Alta = Essencial**  
+> **Prioridade Média = “Good to have”**
 
-# 11. Requisitos Não Funcionais (RNF)
-## **Tabela de Requisitos Não Funcionais**
-ID	Categoria	Prioridade	Descrição
-RNF01	Desempenho	Alta	O sistema deve atualizar leitura de temperatura/humidade a cada 2–5s e reagir a detecção de movimento em <1s.
-RNF02	Fiabilidade	Alta	O sistema deve funcionar continuamente entre 8 a 24 horas sem reiniciar.
-RNF03	Usabilidade	Média	As mensagens no OLED devem ser claras e legíveis, com abreviações simples.
-RNF04	Segurança	Alta	A comunicação deve ser realizada em rede protegida e sem credenciais expostas em texto simples.
-RNF05	Integridade dos Dados	Alta	A aplicação Python deve garantir que todas as mensagens válidas são registadas sem perda.
-RNF06	Manutenção	Média	O código deve ser modular para facilitar alterações futuras, especialmente no Arduino.
-RNF07	Portabilidade	Média	A aplicação deve poder ser executada em qualquer computador com Python e acesso à BD.
-RNF08	Escalabilidade	Baixa/Média	A arquitetura deve permitir adicionar novos sensores/atuadores sem grandes alter
+| ID   | Categoria     | Prioridade | Descrição |
+|------|---------------|------------|-----------|
+| RF01 | Monitorizar   | Alta | O sistema deverá detetar a presença de pessoas na sala através do sensor de movimento (PIR). |
+| RF02 | Monitorizar   | Alta | O sistema deverá medir a temperatura e a humidade ambiente em intervalos regulares ou definidos pelo gestor da segurança. |
+| RF03 | Interface OLED | Média | O sistema mostrará no ecrã OLED os valores atuais de temperatura, humidade e o estado da sala. |
+| RF04 | Alarme | Alta | O sistema ativará o buzzer quando for detetada uma condição de alarme (intrusão ou limites excedidos). |
+| RF05 | Sinalização | Alta | O sistema indicará o estado da sala através do LED RGB (verde = normal, vermelho = alarme, azul = standby/configuração). |
+| RF06 | Comunicação | Alta | O sistema deve enviar periodicamente para o computador/base de dados as leituras e eventos. |
+| RF07 | Armazenamento | Alta | A aplicação deve guardar na base de dados as leituras e eventos recebidos do ESP32. |
+| RF08 | Consulta | Média | A aplicação deve permitir consultar o histórico de leituras e eventos por data/hora. |
+| RF09 | Gestão | Média | O utilizador deverá conseguir desativar temporariamente o alarme através de botão físico ou comando na aplicação. |
+
+## 11. Requisitos Não Funcionais (RNF)
+
+| ID   | Categoria | Prioridade | Descrição |
+|------|-----------|------------|-----------|
+| RNF01 | Desempenho | Alta | O sistema deve atualizar leitura de temperatura/humidade a cada 2–5s e reagir a detecção de movimento em <1s. |
+| RNF02 | Fiabilidade | Alta | O sistema deve funcionar continuamente entre 8 a 24 horas sem reiniciar. |
+| RNF03 | Usabilidade | Média | As mensagens no OLED devem ser claras e legíveis, com abreviações simples. |
+| RNF04 | Segurança | Alta | A comunicação deve ser realizada em rede protegida e sem credenciais expostas em texto simples. |
+| RNF05 | Integridade dos Dados | Alta | A aplicação Python deve garantir que todas as mensagens válidas são registadas sem perda. |
+| RNF06 | Manutenção | Média | O código deve ser modular para facilitar alterações futuras, especialmente no Arduino. |
+| RNF07 | Portabilidade | Média | A aplicação deve poder ser executada em qualquer computador com Python e acesso à BD. |
+| RNF08 | Escalabilidade | Baixa/Média | A arquitetura deve permitir adicionar novos sensores/atuadores sem grandes alterações. |
 
 # 12. Lista de Componentes IoT - Sensores, Atuadores, Controladores e Interface
 
