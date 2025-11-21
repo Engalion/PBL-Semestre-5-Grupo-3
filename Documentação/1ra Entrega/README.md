@@ -4,7 +4,7 @@
 
 ## Projeto
 
-**Sistema Inteligente de Monitorização e Segurança para Sala de Servidores**
+**Sistema Inteligente de Monitorização e Segurança para Datacenter**
 
 ## Elementos do Grupo
 
