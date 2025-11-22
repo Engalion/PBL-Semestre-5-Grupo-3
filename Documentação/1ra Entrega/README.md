@@ -373,24 +373,24 @@ Este conjunto de guiões cobre:
 | ID   | Categoria     | Prioridade | Descrição |
 |------|---------------|------------|-----------|
 | RF01 | Monitorizar   | Alta | O sistema deverá detetar a presença de pessoas na sala através do sensor de movimento (PIR). |
-| RF02 | Monitorizar   | Alta | O sistema deverá medir a temperatura e a humidade ambiente em intervalos regulares ou definidos pelo gestor da segurança. |
-| RF03 | Interface OLED | Média | O sistema mostrará no ecrã OLED os valores atuais de temperatura, humidade e o estado da sala. |
-| RF04 | Alarme | Alta | O sistema ativará o buzzer quando for detetada uma condição de alarme (intrusão ou limites excedidos). |
-| RF05 | Sinalização | Alta | O sistema indicará o estado da sala através do LED RGB (verde = normal, vermelho = alarme, azul = standby/configuração). |
-| RF06 | Comunicação | Alta | O sistema deve enviar periodicamente para o computador/base de dados as leituras e eventos. |
-| RF07 | Armazenamento | Alta | A aplicação deve guardar na base de dados as leituras e eventos recebidos do ESP32. |
-| RF08 | Consulta | Média | A aplicação deve permitir consultar o histórico de leituras e eventos por data/hora. |
+| RF02 | Monitorizar   | Alta | O sistema deverá medir a temperatura e a humidade ambiente em intervalos regulares ou definidos pelo gestor da segurança (equipa de TI, equipa de cybersecurity). |
+| RF03 | Interface OLED | Média | O sistema mostrará no ecrã OLED os valores atuais de temperatura, humidade e o estado da sala (com presença ou sem presença). |
+| RF04 | Alarme | Alta | O sistema ativara o buzzer quando for detetada uma condição de alarme (por exemplo, intrusão ou limite de temperatura ou humidade ultrapassados) e será desativado se as condições voltarem ao normal ou pelo gestor, administrador ou equipa que fique responsável por tal função. |
+| RF05 | Sinalização | Alta | O sistema indica o estado da sala através do LED RGB (ex.: verde = normal, vermelho = alarme, azul = standby/configuração, posteriormente será utilizado conforme o gestor da segurança (equipa de TI, equipa de cybersecurity)). |
+| RF06 | Comunicação | Alta | O sistema deve enviar periodicamente para o computador/base de dados as leituras de temperatura, humidade, estado de presença e eventos de alarme (estes valores serão enviados para uma base de dados para posteriormente sejam analisados e tratados com inteligência artificial). |
+| RF07 | Armazenamento | Alta | A aplicação vai guardar na base de dados as leituras e eventos recebidos do ESP32. |
+| RF08 | Consulta | Média | A aplicação deve permitir consultar o histórico de leituras e eventos (por data/hora) através da base de dados. |
 | RF09 | Gestão | Alta | O sistema deverá permitir que um utilizador autorizado desative o alarme por um período configurável (poderá ser por tempo ou até que seja necessário desativar outra vez depende do gestor/administrador), mediante autenticação por cartão RFID. O sistema deve registar o evento (data/hora, utilizador) na base de dados. |
 
 ## 11. Requisitos Não Funcionais (RNF)
 
 | ID   | Categoria | Prioridade | Descrição |
 |------|-----------|------------|-----------|
-| RNF01 | Desempenho | Alta | O sistema deve atualizar leitura de temperatura/humidade a cada 2–5s e reagir a detecção de movimento em <1s. |
-| RNF02 | Fiabilidade | Alta | O sistema deve funcionar continuamente entre 8 a 24 horas sem reiniciar. |
-| RNF03 | Usabilidade | Média | As mensagens no OLED devem ser claras e legíveis, com abreviações simples. |
-| RNF04 | Segurança | Alta | A comunicação deve ser realizada em rede protegida e sem credenciais expostas em texto simples. |
-| RNF05 | Integridade dos Dados | Alta | A aplicação Python deve garantir que todas as mensagens válidas são registadas sem perda. |
+| RNF01 | Desempenho | Alta | O sistema deve atualizar a leitura da temperatura e humidade pelo menos a cada 2–5 segundos (configurável pelo gestor de segurança, administrador ou equipa ti/cybersecurity) e reagir a movimento em menos de 1 segundo. |
+| RNF02 | Fiabilidade | Alta | O sistema deve conseguir funcionar continuamente durante o período definido (24 horas) sem necessidade de reiniciar. |
+| RNF03 | Usabilidade | Média | As mensagens no ecrã OLED devem ser claras e legíveis, usando abreviaturas simples (ex.: “T: 24°C, H: 60%” T=temperatura e H=Humidade). |
+| RNF04 | Segurança | Alta | A comunicação entre o ESP32 e o computador deve ser feita numa rede Wi-Fi/cabo protegida e o código final não deve expor credenciais em texto simples. |
+| RNF05 | Integridade dos Dados | Alta | A aplicação em Python deve garantir que todas as mensagens válidas recebidas do ESP32 são registadas na base de dados sem perda de informação. |
 | RNF06 | Manutenção | Média | O código deve ser organizado em módulos/funções para facilitar alterações futuras (por exemplo, troca de sensor ou ajuste de limites de alarme isto em Arduino). |
 | RNF07 | Portabilidade | Média | aplicação em Python deve ser executável em sistemas Windows e Linux com Python 3.x instalado. Já o código Arduino deve ser compatível com placas ESP32 standard. |
 | RNF08 | Escalabilidade | Baixa/Média | A arquitetura deve permitir adicionar novos sensores/atuadores sem grandes alterações. |
