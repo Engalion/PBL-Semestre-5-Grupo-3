@@ -380,7 +380,7 @@ Este conjunto de guiões cobre:
 | RF06 | Comunicação | Alta | O sistema deve enviar periodicamente para o computador/base de dados as leituras e eventos. |
 | RF07 | Armazenamento | Alta | A aplicação deve guardar na base de dados as leituras e eventos recebidos do ESP32. |
 | RF08 | Consulta | Média | A aplicação deve permitir consultar o histórico de leituras e eventos por data/hora. |
-| RF09 | Gestão | Média | O utilizador deverá conseguir desativar temporariamente o alarme através de botão físico ou comando na aplicação. |
+| RF09 | Gestão | Alta | O sistema deverá permitir que um utilizador autorizado desative o alarme por um período configurável (poderá ser por tempo ou até que seja necessário desativar outra vez depende do gestor/administrador), mediante autenticação por cartão RFID. O sistema deve registar o evento (data/hora, utilizador) na base de dados. |
 
 ## 11. Requisitos Não Funcionais (RNF)
 
@@ -391,8 +391,8 @@ Este conjunto de guiões cobre:
 | RNF03 | Usabilidade | Média | As mensagens no OLED devem ser claras e legíveis, com abreviações simples. |
 | RNF04 | Segurança | Alta | A comunicação deve ser realizada em rede protegida e sem credenciais expostas em texto simples. |
 | RNF05 | Integridade dos Dados | Alta | A aplicação Python deve garantir que todas as mensagens válidas são registadas sem perda. |
-| RNF06 | Manutenção | Média | O código deve ser modular para facilitar alterações futuras, especialmente no Arduino. |
-| RNF07 | Portabilidade | Média | A aplicação deve poder ser executada em qualquer computador com Python e acesso à BD. |
+| RNF06 | Manutenção | Média | O código deve ser organizado em módulos/funções para facilitar alterações futuras (por exemplo, troca de sensor ou ajuste de limites de alarme isto em Arduino). |
+| RNF07 | Portabilidade | Média | aplicação em Python deve ser executável em sistemas Windows e Linux com Python 3.x instalado. Já o código Arduino deve ser compatível com placas ESP32 standard. |
 | RNF08 | Escalabilidade | Baixa/Média | A arquitetura deve permitir adicionar novos sensores/atuadores sem grandes alterações. |
 
 # 12. Lista de Componentes IoT - Sensores, Atuadores, Controladores e Interface
