@@ -45,10 +45,216 @@ O sistema recolhe dados através de sensores instalados, envia‑os para um serv
 
 ---
 
-# 3. Guiões de Teste (versão preliminar)
+# 3. Guiões de Teste 
 
+## 1. Testes de Sensores e Monitorização (RF01, RF02, RNF01)
 
 ---
+
+### 🧪 **Teste 1 — Deteção de Movimento (PIR)**
+**Objetivo:** Validar que o sensor PIR deteta presença corretamente.  
+**RF associado:** RF01  
+**Pré-condições:** ESP32 ligado; PIR funcional.
+
+**Passos:**
+1. Ligar o sistema e aguardar inicialização.
+2. Garantir ausência de movimento por 10 segundos.
+3. Caminhar na zona de deteção.
+4. Observar LED, OLED e logs.
+
+**Resultados esperados:**
+- Estado muda para **"Presença Detetada"** em <1s.  
+- LED passa a vermelho (alarme).  
+- Evento registado e enviado para o servidor.
+
+---
+
+### 🧪 **Teste 2 — Leitura de Temperatura e Humidade (DHT)**
+**Objetivo:** Verificar leituras de temperatura e humidade.  
+**RF associado:** RF02
+
+**Passos:**
+1. Ligar o sistema.
+2. Verificar valores no OLED ou consola.
+3. Aumentar temperatura aproximando a mão.
+4. Observar atualização dos valores.
+
+**Resultados esperados:**
+- Leituras atualizadas a cada 2–5s.  
+- Valores coerentes com ambiente real.  
+- Dados enviados à API.
+
+---
+
+## 2. Testes da Interface OLED (RF03, RNF03)
+
+---
+
+### 🧪 **Teste 3 — Atualização do Display OLED**
+**Objetivo:** Validar informação apresentada no OLED.  
+**RF associado:** RF03
+
+**Passos:**
+1. Ligar sistema.
+2. Confirmar que OLED mostra temperatura, humidade e estado.
+3. Criar movimento e verificar atualização do estado.
+
+**Resultados esperados:**
+- Texto legível.  
+- Atualização automática sem falhas.
+
+---
+
+## 3. Testes dos Atuadores (RF04, RF05)
+
+---
+
+### 🧪 **Teste 4 — Ativação do Buzzer**
+**Objetivo:** Verificar funcionamento do alarme sonoro.  
+**RF associado:** RF04
+
+**Passos:**
+1. Simular intrusão com movimento no PIR.
+2. Observar ativação do buzzer.
+
+**Resultados esperados:**
+- Buzzer ativa instantaneamente (<1s).  
+- Evento enviado ao servidor.
+
+---
+
+### 🧪 **Teste 5 — LED RGB (Sinalização de Estados)**
+**Objetivo:** Validar mudança de cores conforme estado.  
+**RF associado:** RF05
+
+**Resultados esperados:**
+- Verde → Sistema normal.  
+- Vermelho → Alarme/intrusão.  
+- Azul → Standby/configuração.
+
+---
+
+## 4. Testes de Comunicação ESP32 → API → BD (RF06, RF07, RNF04, RNF05)
+
+---
+
+### 🧪 **Teste 6 — Envio de Dados para a API**
+**Objetivo:** Confirmar transmissão de dados.  
+**RF associado:** RF06
+
+**Passos:**
+1. Ligar o ESP32 com Wi-Fi ativo.
+2. Observar consola/logs da API.
+3. Confirmar receção de JSONs com leituras.
+
+**Resultados esperados:**
+- API recebe dados com código 200 OK.  
+- Sem perda de mensagens.
+
+---
+
+### 🧪 **Teste 7 — Registo de Dados na Base de Dados**
+**Objetivo:** Garantir armazenamento persistente.  
+**RF associado:** RF07
+
+**Passos:**
+1. Forçar 5 leituras do ESP32.
+2. Abrir BD.
+3. Verificar se as entradas foram criadas.
+
+**Resultados esperados:**
+- Todas as leituras registadas.  
+- Campos completos com timestamp.
+
+---
+
+## 5. Testes de Consulta e Gestão (RF08, RF09)
+
+---
+
+### 🧪 **Teste 8 — Consulta de Histórico**
+**Objetivo:** Validar consulta de registos guardados.  
+**RF associado:** RF08
+
+**Passos:**
+1. Abrir a aplicação/dashboard.
+2. Selecionar intervalo de datas.
+3. Ver dados listados.
+
+**Resultados esperados:**
+- Mostra leituras corretas.  
+- Sem erros de ligação.
+
+---
+
+### 🧪 **Teste 9 — Desativação Temporária do Alarme**
+**Objetivo:** Verificar que o alarme pode ser bloqueado.  
+**RF associado:** RF09
+
+**Passos:**
+1. Ativar alarme via movimento.
+2. Desativar via botão físico ou comando.
+3. Criar novo movimento.
+
+**Resultados esperados:**
+- Buzzer silencia imediatamente.  
+- Movimentos seguintes não ativam alarme enquanto desativado.  
+- Evento registado na BD.
+
+---
+
+## 6. Testes Não Funcionais (RNF01–RNF08)
+
+---
+
+### 🧪 **Teste 10 — Desempenho e Latência**
+**Objetivo:** Medir tempo de resposta do sistema.  
+**RNF associado:** RNF01
+
+**Resultados esperados:**
+- Deteção PIR → reação <1s.  
+- Leituras DHT → intervalo 2–5s.
+
+---
+
+### 🧪 **Teste 11 — Estabilidade (8–24h)**
+**Objetivo:** Validar fiabilidade prolongada.  
+**RNF associado:** RNF02
+
+**Resultados esperados:**
+- Sistema opera 8–24h sem reiniciar.  
+- Sem falhas de ligação.
+
+---
+
+### 🧪 **Teste 12 — Segurança da Comunicação**
+**Objetivo:** Garantir proteção dos dados.  
+**RNF associado:** RNF04
+
+**Resultados esperados:**
+- Nenhuma password exposta no código.  
+- Wi-Fi configurado em rede protegida.
+
+---
+
+### 🧪 **Teste 13 — Portabilidade**
+**Objetivo:** Confirmar execução em diferentes ambientes.  
+**RNF associado:** RNF07
+
+**Resultados esperados:**
+- Script Python executa em Windows e Linux.  
+- BD acessível com dependências instaladas.
+
+---
+
+## ✅ **Resumo**
+Este conjunto de guiões cobre:
+- Todos os **RF01–RF09**  
+- Todos os **RNF relevantes**  
+- Sensores, atuadores, comunicação, BD, API e lógica de alarme  
+
+---
+
 
 # 4. Enquadramento nas Unidades Curriculares
 
