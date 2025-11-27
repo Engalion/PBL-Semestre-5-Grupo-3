@@ -373,14 +373,6 @@ Este conjunto de guiões cobre:
 
 ## 10. Requisitos Funcionais (RF)
 
-## **Notas sobre prioridade**
-
-- **Prioridade Alta = Essencial**  
-  (Obrigatório para o funcionamento central do projeto)
-
-- **Prioridade Média = “Good to have”**  
-  (Melhora o uso, mas não compromete o essencial)
-
 | ID   | Categoria      | Prioridade | Descrição |
 |------|----------------|------------|-----------|
 | RF01 | Monitorizar    | Alta | O sistema deverá detetar a presença de pessoas na sala através do sensor de movimento (PIR). |
@@ -406,7 +398,14 @@ Este conjunto de guiões cobre:
 | RNF07 | Portabilidade        | Média | A aplicação em Python deve ser executável em Windows e Linux com Python 3.x. O código Arduino deve ser compatível com placas ESP32 standard. |
 | RNF08 | Escalabilidade       | Baixa/Média | A arquitetura deve permitir a adição futura de novos sensores ou atuadores sem grandes alterações. |
 
+## **Notas sobre prioridade**
 
+- **Prioridade Alta = Essencial**  
+  (Obrigatório para o funcionamento central do projeto)
+
+- **Prioridade Média = “Good to have”**  
+  (Melhora o uso, mas não compromete o essencial)
+  
 # 12. Lista de Componentes IoT - Sensores, Atuadores, Controladores e Interface
 
 ## 1. Microcontrolador
