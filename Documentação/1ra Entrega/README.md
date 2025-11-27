@@ -187,19 +187,20 @@ O sistema recolhe dados através de sensores instalados, envia‑os para um serv
 
 ---
 
-### 🧪 **Teste 9 — Desativação Temporária do Alarme**
-**Objetivo:** Verificar que o alarme pode ser bloqueado.  
-**RF associado:** RF09
+### 🧪 **Teste 9 — Autorização por RFID e Desativação do Alarme**
+**Objetivo:** Verificar que o alarme pode ser desativado através de cartão RFID.  
+**RF associado:** RF09  
 
 **Passos:**
-1. Ativar alarme via movimento.
-2. Desativar via botão físico ou comando.
-3. Criar novo movimento.
+1. Ativar alarme através de deteção de movimento (PIR).
+2. Aproximar um cartão RFID autorizado do leitor RC522.
+3. Confirmar mudança do estado da sala.
 
 **Resultados esperados:**
-- Buzzer silencia imediatamente.  
-- Movimentos seguintes não ativam alarme enquanto desativado.  
-- Evento registado na BD.
+- LED vermelho desativa imediatamente.  
+- Buzzer silencia no mesmo instante.  
+- O novo movimento NÃO reativa o alarme enquanto a sessão estiver autorizada.  
+- Evento de autenticação (data/hora, ID do cartão) registado na BD.
 
 ---
 
@@ -299,7 +300,8 @@ Este conjunto de guiões cobre:
 * 8 Cabos Dupont F-M
 * 8 Cabos Dupont M-M
 * Computador
-* Futura Possivel adição Botão onde inclui botão físico, resistência 10k e dois fios de lição a 3v e ground.
+* Leitor RFID RC522
+* Cartão/Tag RFID compatível
 
 ## **Software**
 
@@ -329,6 +331,8 @@ Este conjunto de guiões cobre:
 * DHT22 posicionado externamente.
 * RFID frontal para identificação.
 * LED/buzzer para alertas.
+* Leitor RFID RC522 montado no exterior da caixa para permitir autenticação.  
+* Cartão RFID associado aos utilizadores autorizados.
 
 *(Esquemas detalhados serão adicionados no Milestone 2.)*
 
@@ -345,6 +349,8 @@ Este conjunto de guiões cobre:
 * Buzzer – 1
 * Jumpers – vários
 * Breadboard – 1
+* RFID RC522 – 1  
+* Cartão/Tag RFID – 1 
 
 ---
 
@@ -367,33 +373,39 @@ Este conjunto de guiões cobre:
 
 ## 10. Requisitos Funcionais (RF)
 
-> **Prioridade Alta = Essencial**  
-> **Prioridade Média = “Good to have”**
+# NOTA SOBRE PRIORIDADES
 
-| ID   | Categoria     | Prioridade | Descrição |
-|------|---------------|------------|-----------|
-| RF01 | Monitorizar   | Alta | O sistema deverá detetar a presença de pessoas na sala através do sensor de movimento (PIR). |
-| RF02 | Monitorizar   | Alta | O sistema deverá medir a temperatura e a humidade ambiente em intervalos regulares ou definidos pelo gestor da segurança (equipa de TI, equipa de cybersecurity). |
+- **Prioridade Alta = Essencial**  
+  (Obrigatório para o funcionamento central do projeto)
+
+- **Prioridade Média = “Good to have”**  
+  (Melhora o uso, mas não compromete o essencial)
+
+| ID   | Categoria      | Prioridade | Descrição |
+|------|----------------|------------|-----------|
+| RF01 | Monitorizar    | Alta | O sistema deverá detetar a presença de pessoas na sala através do sensor de movimento (PIR). |
+| RF02 | Monitorizar    | Alta | O sistema deverá medir a temperatura e a humidade ambiente em intervalos regulares ou definidos pelo gestor da segurança (equipa de TI, equipa de cybersecurity). |
 | RF03 | Interface OLED | Média | O sistema mostrará no ecrã OLED os valores atuais de temperatura, humidade e o estado da sala (com presença ou sem presença). |
-| RF04 | Alarme | Alta | O sistema ativara o buzzer quando for detetada uma condição de alarme (por exemplo, intrusão ou limite de temperatura ou humidade ultrapassados) e será desativado se as condições voltarem ao normal ou pelo gestor, administrador ou equipa que fique responsável por tal função. |
-| RF05 | Sinalização | Alta | O sistema indica o estado da sala através do LED RGB (ex.: verde = normal, vermelho = alarme, azul = standby/configuração, posteriormente será utilizado conforme o gestor da segurança (equipa de TI, equipa de cybersecurity)). |
-| RF06 | Comunicação | Alta | O sistema deve enviar periodicamente para o computador/base de dados as leituras de temperatura, humidade, estado de presença e eventos de alarme (estes valores serão enviados para uma base de dados para posteriormente sejam analisados e tratados com inteligência artificial). |
-| RF07 | Armazenamento | Alta | A aplicação vai guardar na base de dados as leituras e eventos recebidos do ESP32. |
-| RF08 | Consulta | Média | A aplicação deve permitir consultar o histórico de leituras e eventos (por data/hora) através da base de dados. |
-| RF09 | Gestão | Alta | O sistema deverá permitir que um utilizador autorizado desative o alarme por um período configurável (poderá ser por tempo ou até que seja necessário desativar outra vez depende do gestor/administrador), mediante autenticação por cartão RFID. O sistema deve registar o evento (data/hora, utilizador) na base de dados. |
+| RF04 | Alarme         | Alta | O sistema ativará o buzzer quando for detetada uma condição de alarme (por exemplo, intrusão ou limite de temperatura ou humidade ultrapassados) e será desativado se as condições voltarem ao normal ou pelo gestor/administrador responsável. |
+| RF05 | Sinalização    | Alta | O sistema indicará o estado da sala através do LED RGB (ex.: verde = normal, vermelho = alarme, azul = standby/configuração). |
+| RF06 | Comunicação    | Alta | O sistema deve enviar periodicamente para o computador/base de dados as leituras de temperatura, humidade, estado de presença e eventos de alarme, para posterior análise e tratamento com inteligência artificial. |
+| RF07 | Armazenamento  | Alta | A aplicação vai guardar na base de dados as leituras e eventos recebidos do ESP32. |
+| RF08 | Consulta       | Média | A aplicação deve permitir consultar o histórico de leituras e eventos (por data/hora) através da base de dados. |
+| RF09 | Gestão         | Alta | O sistema deverá permitir que um utilizador autorizado desative o alarme por um período configurável mediante autenticação por cartão RFID. O sistema deve registar o evento (data/hora e utilizador) na base de dados. |
 
 ## 11. Requisitos Não Funcionais (RNF)
 
-| ID   | Categoria | Prioridade | Descrição |
-|------|-----------|------------|-----------|
-| RNF01 | Desempenho | Alta | O sistema deve atualizar a leitura da temperatura e humidade pelo menos a cada 2–5 segundos (configurável pelo gestor de segurança, administrador ou equipa ti/cybersecurity) e reagir a movimento em menos de 1 segundo. |
-| RNF02 | Fiabilidade | Alta | O sistema deve conseguir funcionar continuamente durante o período definido (24 horas) sem necessidade de reiniciar. |
-| RNF03 | Usabilidade | Média | As mensagens no ecrã OLED devem ser claras e legíveis, usando abreviaturas simples (ex.: “T: 24°C, H: 60%” T=temperatura e H=Humidade). |
-| RNF04 | Segurança | Alta | A comunicação entre o ESP32 e o computador deve ser feita numa rede Wi-Fi/cabo protegida e o código final não deve expor credenciais em texto simples. |
-| RNF05 | Integridade dos Dados | Alta | A aplicação em Python deve garantir que todas as mensagens válidas recebidas do ESP32 são registadas na base de dados sem perda de informação. |
-| RNF06 | Manutenção | Média | O código deve ser organizado em módulos/funções para facilitar alterações futuras (por exemplo, troca de sensor ou ajuste de limites de alarme isto em Arduino). |
-| RNF07 | Portabilidade | Média | aplicação em Python deve ser executável em sistemas Windows e Linux com Python 3.x instalado. Já o código Arduino deve ser compatível com placas ESP32 standard. |
-| RNF08 | Escalabilidade | Baixa/Média | A arquitetura deve permitir adicionar novos sensores/atuadores sem grandes alterações. |
+| ID    | Categoria            | Prioridade | Descrição |
+|-------|----------------------|------------|-----------|
+| RNF01 | Desempenho           | Alta | O sistema deve atualizar a leitura da temperatura e humidade pelo menos a cada 2–5 segundos e reagir a movimento em menos de 1 segundo. |
+| RNF02 | Fiabilidade          | Alta | O sistema deve conseguir funcionar continuamente durante 24 horas sem necessidade de reiniciar. |
+| RNF03 | Usabilidade          | Média | As mensagens no ecrã OLED devem ser claras e legíveis, usando abreviações simples (ex.: “T: 24°C, H: 60%”). |
+| RNF04 | Segurança            | Alta | A comunicação entre o ESP32 e o computador deve ser feita numa rede protegida e o código final não deve expor credenciais em texto simples. |
+| RNF05 | Integridade dos Dados| Alta | A aplicação em Python deve garantir que todas as mensagens válidas recebidas do ESP32 são registadas na base de dados sem perda de informação. |
+| RNF06 | Manutenção           | Média | O código deve ser organizado em módulos/funções para facilitar alterações futuras (ex.: troca de sensor, ajuste de limites de alarme). |
+| RNF07 | Portabilidade        | Média | A aplicação em Python deve ser executável em Windows e Linux com Python 3.x. O código Arduino deve ser compatível com placas ESP32 standard. |
+| RNF08 | Escalabilidade       | Baixa/Média | A arquitetura deve permitir a adição futura de novos sensores ou atuadores sem grandes alterações. |
+
 
 # 12. Lista de Componentes IoT - Sensores, Atuadores, Controladores e Interface
 
@@ -430,7 +442,17 @@ Este conjunto de guiões cobre:
   - Medir temperatura ambiente  
   - Medir humidade relativa  
   - Permitir registar e monitorizar condições da sala  
-  - Acionar alarme caso os valores passem limites (quando definido)  
+  - Acionar alarme caso os valores passem limites (quando definido)
+
+## 2.3 Leitor RFID RC522
+- **Tipo:** Sensor de identificação por radiofrequência  
+- **Descrição:**  
+  O módulo RFID RC522 permite ler e escrever cartões/tag RFID utilizando comunicação SPI. É amplamente usado para controlo de acessos devido ao baixo custo e simplicidade.  
+- **Função no projeto:**  
+  - Controlar o acesso à sala de servidores via cartão RFID  
+  - Registar entradas autorizadas e tentativas falhadas  
+  - Complementar o sensor PIR com autenticação  
+  - Aumentar a segurança física do sistema  
 
 ---
 
