@@ -373,7 +373,7 @@ Este conjunto de guiões cobre:
 
 ## 10. Requisitos Funcionais (RF)
 
-# NOTA SOBRE PRIORIDADES
+## **Notas sobre prioridade**
 
 - **Prioridade Alta = Essencial**  
   (Obrigatório para o funcionamento central do projeto)
