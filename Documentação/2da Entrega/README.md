@@ -542,54 +542,43 @@ Este conjunto de guiões cobre:
 
 ## 13. DIAGRAMA DE ARQUITETURA (ASCII)
 
-                  ┌────────────────────────────┐
-                  │        Sensores            │
-                  │                            │
-                  │  ┌────────────┐            │
-                  │  │  DHT11     │──Temp/Hum──┤
-                  │  └────────────┘            │
-                  │                            │
-                  │  ┌────────────┐            │
-                  │  │ LDR (Luz)  │───ADC──────┤
-                  │  └────────────┘            │
-                  │                            │
-                  │  ┌────────────┐            │
-                  │  │ Buzzer     │──Digital───┤
-                  │  └────────────┘            │
-                  │                            │
-                  │  ┌────────────┐            │
-                  │  │ LED RGB    │──PWM───────┤
-                  │  └────────────┘            │
-                  └────────────────────────────┘
-                                   │
-                                   │
-                SPI / I2C / GPIO   │
+                                           ┌──────────────────────────────┐
+                          │       Utilizador             │
+                          │ (Cartão RFID / Observação)   │
+                          └─────────────┬────────────────┘
+                                        │
+                                        ▼
+                          ┌──────────────────────────────┐
+                          │         Sensor RFID           │
+                          │          RC522               │
+                          └─────────────┬────────────────┘
+                                        │ UID
+                                        ▼
+                    ┌──────────────────────────────┐
+                    │         ESP32 / Arduino       │
+                    │──────────────────────────────│
+                    │ - Lê RFID (RC522)             │
+                    │ - Lê sensor DHT11 (Temp/HR)   │
+                    │ - Lê LDR (Luminosidade)       │
+                    │ - Mostra info no OLED         │
+                    │ - Controla buzzer/LEDs        │
+                    │ - Envia dados via Wi-Fi       │
+                    └──────────────┬────────────────┘
+                                   │ HTTP POST
                                    ▼
+                ┌────────────────────────────────────────────┐
+                │                  Servidor PHP               │
+                │ (acessos.php / sensores.php / db.php)      │
+                └───────────────────┬────────────────────────┘
+                                    │ Escreve / Lê
+                                    ▼
+                        ┌──────────────────────────────┐
+                        │         Base de Dados         │
+                        │    (MySQL/MariaDB)            │
+                        │ - Logs de acessos RFID        │
+                        │ - Registos dos sensores       │
+                        └──────────────────────────────┘
 
-    ┌────────────────────────────────────────────────────────────┐
-    │                        ESP32 DevKit                        │
-    │                                                            │
-    │   - Leitura de sensores (DHT11 / LDR)                      │
-    │   - Controlo de atuadores (LED RGB / Buzzer)               │
-    │   - Comunicação SPI com módulo RFID-RC522                  │
-    │   - Comunicação I2C com display OLED                       │
-    │   - Execução da lógica do sistema                          │
-    └────────────────────────────────────────────────────────────┘
-                                   │
-                  I2C              │
-                                   ▼
-         ┌────────────────────────────────┐
-         │      Display OLED (I2C)        │
-         │  - Mostra leituras e estados   │
-         └────────────────────────────────┘
-
-                                   │
-                  SPI              │
-                                   ▼
-         ┌────────────────────────────────┐
-         │        RFID-RC522 (SPI)        │
-         │  - Leitura de cartões RFID     │
-         └────────────────────────────────┘
 
 ---
 
