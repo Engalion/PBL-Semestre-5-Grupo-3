@@ -406,7 +406,7 @@ Este conjunto de guiões cobre:
 - **Prioridade Média = “Good to have”**  
   (Melhora o uso, mas não compromete o essencial)
   
-# 12. Lista de Componentes IoT - Sensores, Atuadores, Controladores e Interface
+## 12. Lista de Componentes IoT - Sensores, Atuadores, Controladores e Interface
 
 ## 1. Microcontrolador
 
@@ -539,4 +539,179 @@ Este conjunto de guiões cobre:
 | Biblioteca Python: sqlite3 / MySQL / outro | Base de dados que permite guardar dados persistentes. Armazenar leituras (temperatura/humidade/movimento) e eventos (alarme). |
 | Driver USB do ESP32 | Driver de comunicação serial com o microcontrolador. Permite programar o ESP32 via cabo USB. |
 | Sistema Operativo (Windows / Linux) | Sistema onde correm Python e Arduino IDE. Execução da aplicação e suporte à programação. |
+
+## 13. DIAGRAMA DE ARQUITETURA (ASCII)
+
+                  ┌────────────────────────────┐
+                  │        Sensores            │
+                  │                            │
+                  │  ┌────────────┐            │
+                  │  │  DHT11     │──Temp/Hum──┤
+                  │  └────────────┘            │
+                  │                            │
+                  │  ┌────────────┐            │
+                  │  │ LDR (Luz)  │───ADC──────┤
+                  │  └────────────┘            │
+                  │                            │
+                  │  ┌────────────┐            │
+                  │  │ Buzzer     │──Digital───┤
+                  │  └────────────┘            │
+                  │                            │
+                  │  ┌────────────┐            │
+                  │  │ LED RGB    │──PWM───────┤
+                  │  └────────────┘            │
+                  └────────────────────────────┘
+                                   │
+                                   │
+                SPI / I2C / GPIO   │
+                                   ▼
+
+    ┌────────────────────────────────────────────────────────────┐
+    │                        ESP32 DevKit                        │
+    │                                                            │
+    │   - Leitura de sensores (DHT11 / LDR)                      │
+    │   - Controlo de atuadores (LED RGB / Buzzer)               │
+    │   - Comunicação SPI com módulo RFID-RC522                  │
+    │   - Comunicação I2C com display OLED                       │
+    │   - Execução da lógica do sistema                          │
+    └────────────────────────────────────────────────────────────┘
+                                   │
+                  I2C              │
+                                   ▼
+         ┌────────────────────────────────┐
+         │      Display OLED (I2C)        │
+         │  - Mostra leituras e estados   │
+         └────────────────────────────────┘
+
+                                   │
+                  SPI              │
+                                   ▼
+         ┌────────────────────────────────┐
+         │        RFID-RC522 (SPI)        │
+         │  - Leitura de cartões RFID     │
+         └────────────────────────────────┘
+
+---
+
+## 14. DESCRIÇÃO DA SOLUÇÃO
+
+O projeto consiste num sistema IoT/embebido baseado no **ESP32**, que integra múltiplos sensores e atuadores, permitindo:
+
+- Leitura de **temperatura e humidade** (DHT11)
+- Leitura do nível de **luminosidade** (LDR)
+- Identificação por **RFID** (RC522)
+- Sinalização sonora através de **buzzer**
+- Indicação visual com **LED RGB**
+- Exibição de informação num **display OLED I2C**
+
+O conjunto cria um sistema interativo, capaz de monitorizar ambiente, identificar utilizadores por cartão, e apresentar dados em tempo real.
+
+---
+
+## 15. ARQUITETURA IMPLEMENTADA (DETALHADA)
+
+## 💡 ESP32 (núcleo do sistema)
+
+O ESP32 funciona como unidade central de processamento:
+
+- Faz a leitura de sensores  
+- Atualiza o display OLED  
+- Recebe leituras do RFID  
+- Executa lógicas de decisão (ex.: alarme, controlo LED)  
+- Pode futuramente comunicar via WiFi (MQTT, HTTP, etc.)  
+
+---
+
+## 🔹 Sensores
+
+### **1. DHT11 (Temperatura e Humidade)**
+
+- Comunicação: 1 fio digital  
+- Função: Medir condições ambientais  
+- Utilização: Mostrar no OLED e/ou controlar lógica (ex.: avisos)
+
+### **2. LDR (Sensor de Luz)**
+
+- Ligado a um divisor de tensão + entrada ADC  
+- Mede intensidade luminosa  
+- Pode ativar LED ou alarmes dependendo da leitura
+
+---
+
+## 🔹 Atuadores
+
+### **1. LED RGB**
+
+- Controlado via 3 pinos PWM  
+- Pode indicar:
+  - Estado do sistema  
+  - Acesso autorizado/negado (RFID)  
+  - Alarmes ambientais  
+
+### **2. Buzzer**
+
+- Ligado a pino digital  
+- Sinaliza eventos:
+  - Cartão RFID inválido  
+  - Alarmes de temperatura  
+  - Feedback do sistema  
+
+---
+
+## 🔹 Módulos de Comunicação
+
+### **1. Display OLED**
+
+- Comunicação: **I2C (SDA + SCL)**  
+- Função:
+  - Exibir temperatura, humidade, luz  
+  - Mostrar mensagens de acesso  
+  - Interface visual do sistema  
+
+### **2. RFID-RC522**
+
+- Comunicação: **SPI**  
+- Função:
+  - Ler cartões/chaves RFID  
+  - Implementar acesso seguro  
+  - Acionar feedback visual/sonoro  
+
+---
+
+## 16. FLUXO GERAL DE FUNCIONAMENTO
+
+1. **Inicialização**
+   - ESP32 configura I2C, SPI e pinos digitais.
+   - Display mostra mensagem inicial.
+
+2. **Leitura de sensores**
+   - DHT11 envia temperatura e humidade.
+   - LDR envia valor de luminosidade.
+
+3. **RFID verifica cartão**
+   - ESP32 lê UID via SPI  
+   - Compara com lista de cartões válidos  
+
+4. **Feedback**
+   - Acesso autorizado: LED verde + mensagem no OLED  
+   - Acesso negado: LED vermelho + buzzer  
+
+5. **Monitorização contínua**
+   - Display atualizado em tempo real  
+   - LED e buzzer acionados conforme parâmetros programados  
+
+---
+
+## 17. BENEFÍCIOS DA ARQUITETURA
+
+- Modular (sensores independentes)  
+- Escalável (mais sensores facilmente integráveis)  
+- Baixo consumo  
+- Integra LCD para interface com o utilizador  
+- RFID adiciona segurança  
+- Pode evoluir para IoT (ESP32 suporta WiFi / Bluetooth)  
+
+---
+
+
 
