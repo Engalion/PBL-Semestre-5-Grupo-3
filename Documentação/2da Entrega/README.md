@@ -542,41 +542,41 @@ Este conjunto de guiões cobre:
 
 ## 13. DIAGRAMA DE ARQUITETURA (ASCII)
 
-                                           ┌──────────────────────────────┐
+                          ┌──────────────────────────────┐
                           │       Utilizador             │
                           │ (Cartão RFID / Observação)   │
                           └─────────────┬────────────────┘
                                         │
                                         ▼
                           ┌──────────────────────────────┐
-                          │         Sensor RFID           │
+                          │         Sensor RFID          │
                           │          RC522               │
                           └─────────────┬────────────────┘
                                         │ UID
                                         ▼
                     ┌──────────────────────────────┐
-                    │         ESP32 / Arduino       │
+                    │         ESP32 / Arduino      │
                     │──────────────────────────────│
-                    │ - Lê RFID (RC522)             │
-                    │ - Lê sensor DHT11 (Temp/HR)   │
-                    │ - Lê LDR (Luminosidade)       │
-                    │ - Mostra info no OLED         │
-                    │ - Controla buzzer/LEDs        │
-                    │ - Envia dados via Wi-Fi       │
-                    └──────────────┬────────────────┘
+                    │ - Lê RFID (RC522)            │
+                    │ - Lê sensor DHT11 (Temp/HR)  │
+                    │ - Lê LDR (Luminosidade)      │
+                    │ - Mostra info no OLED        │
+                    │ - Controla buzzer/LEDs       │
+                    │ - Envia dados via Wi-Fi      │
+                    └──────────────┬───────────────┘
                                    │ HTTP POST
                                    ▼
                 ┌────────────────────────────────────────────┐
-                │                  Servidor PHP               │
+                │                  Servidor PHP              │
                 │ (acessos.php / sensores.php / db.php)      │
                 └───────────────────┬────────────────────────┘
                                     │ Escreve / Lê
                                     ▼
                         ┌──────────────────────────────┐
-                        │         Base de Dados         │
-                        │    (MySQL/MariaDB)            │
-                        │ - Logs de acessos RFID        │
-                        │ - Registos dos sensores       │
+                        │         Base de Dados        │
+                        │    (MySQL/MariaDB)           │
+                        │ - Logs de acessos RFID       │
+                        │ - Registos dos sensores      │
                         └──────────────────────────────┘
 
 
@@ -584,121 +584,124 @@ Este conjunto de guiões cobre:
 
 ## 14. DESCRIÇÃO DA SOLUÇÃO
 
-O projeto consiste num sistema IoT/embebido baseado no **ESP32**, que integra múltiplos sensores e atuadores, permitindo:
+O projeto consiste num sistema de controlo de acessos e monitorização ambiental, utilizando um microcontrolador ESP32/Arduino ligado a sensores e a um servidor web.
 
-- Leitura de **temperatura e humidade** (DHT11)
-- Leitura do nível de **luminosidade** (LDR)
-- Identificação por **RFID** (RC522)
-- Sinalização sonora através de **buzzer**
-- Indicação visual com **LED RGB**
-- Exibição de informação num **display OLED I2C**
+O sistema desempenha três funções principais:
 
-O conjunto cria um sistema interativo, capaz de monitorizar ambiente, identificar utilizadores por cartão, e apresentar dados em tempo real.
+### 1. Controlo de Acessos com RFID (RC522)
+
+- O utilizador aproxima um cartão RFID.
+- O ESP32 lê o UID do cartão.
+- O microcontrolador envia o UID para o servidor via HTTP.
+- O servidor (acessos.php) guarda o registo e devolve permitido / negado.
+- O ESP32 mostra o estado no display OLED e ativa LEDs e buzzer.
+
+### 2. Monitorização Ambiental
+
+- O ESP32 lê periodicamente:
+  - Temperatura (DHT11)
+  - Humidade (DHT11)
+  - Luminosidade (LDR)
+- Estes dados são enviados para o servidor (sensores.php) e guardados numa base de dados.
+
+### 3. Interface e Feedback Local
+
+O sistema inclui:
+
+- Display OLED para visualização de cartões, temperatura e humidade.
+- LEDs verde/vermelho como indicação de acesso.
+- Buzzer para avisos sonoros.
+- Wi-Fi para comunicação com o servidor.
 
 ---
 
 ## 15. ARQUITETURA IMPLEMENTADA (DETALHADA)
 
-## 💡 ESP32 (núcleo do sistema)
+A arquitetura é dividida em três camadas:
 
-O ESP32 funciona como unidade central de processamento:
+## Camada 1 — Hardware / Sensores
 
-- Faz a leitura de sensores  
-- Atualiza o display OLED  
-- Recebe leituras do RFID  
-- Executa lógicas de decisão (ex.: alarme, controlo LED)  
-- Pode futuramente comunicar via WiFi (MQTT, HTTP, etc.)  
+**Sensores:**
 
+- RC522 (RFID) — Leitura de cartões/tag NFC.
+- DHT11 — Mede temperatura e humidade.
+- LDR + resistor — Mede luminosidade ambiente.
+
+**Atuadores:**
+
+- LED verde — acesso autorizado.
+- LED vermelho — acesso negado.
+- Buzzer — aviso sonoro.
+
+**Interface:**
+
+- Display OLED I2C — mostra dados dos sensores e informações do acesso.
+
+## Camada 2 — Microcontrolador (ESP32 / NodeMCU)
+
+**Funções do ESP32:**
+
+**Leitura de Sensores**
+
+- UID do RC522 (via SPI).
+- Temperatura e Humidade do DHT11.
+- Luminosidade (LDR → analógico).
+
+**Processamento**
+
+- Identificação do cartão.
+- Geração de alertas (LEDs/buzzer).
+- Escrita no display OLED.
+
+**Comunicação**
+
+- Conexão Wi-Fi.
+- Envio de dados por HTTP POST para:
+  - acessos.php
+  - sensores.php
+
+**Bibliotecas Utilizadas**
+
+- MFRC522 → RFID
+- DHT → Temperatura e humidade
+- Adafruit_SSD1306 → OLED
+- HTTPClient → Comunicação HTTP
+- WiFi.h → Wi-Fi
+
+## Camada 3 — Servidor Web + Base de Dados
+
+**Scripts PHP**
+
+- db.php → ligação à base de dados
+- acessos.php → processa e regista UID
+- sensores.php → recebe dados ambientais
+
+**Base de Dados MySQL**
+
+**Tabelas típicas:**
+
+- acessos
+  - UID
+  - data/hora
+  - estado (permitido / negado)
+- sensores
+  - temperatura
+  - humidade
+  - luminosidade
+  - timestamp
+- utilizadores 
+  - nome
+  - UID autorizado
 ---
 
-## 🔹 Sensores
+## 16. Funcionamento Geral
 
-### **1. DHT11 (Temperatura e Humidade)**
-
-- Comunicação: 1 fio digital  
-- Função: Medir condições ambientais  
-- Utilização: Mostrar no OLED e/ou controlar lógica (ex.: avisos)
-
-### **2. LDR (Sensor de Luz)**
-
-- Ligado a um divisor de tensão + entrada ADC  
-- Mede intensidade luminosa  
-- Pode ativar LED ou alarmes dependendo da leitura
-
----
-
-## 🔹 Atuadores
-
-### **1. LED RGB**
-
-- Controlado via 3 pinos PWM  
-- Pode indicar:
-  - Estado do sistema  
-  - Acesso autorizado/negado (RFID)  
-  - Alarmes ambientais  
-
-### **2. Buzzer**
-
-- Ligado a pino digital  
-- Sinaliza eventos:
-  - Cartão RFID inválido  
-  - Alarmes de temperatura  
-  - Feedback do sistema  
-
----
-
-## 🔹 Módulos de Comunicação
-
-### **1. Display OLED**
-
-- Comunicação: **I2C (SDA + SCL)**  
-- Função:
-  - Exibir temperatura, humidade, luz  
-  - Mostrar mensagens de acesso  
-  - Interface visual do sistema  
-
-### **2. RFID-RC522**
-
-- Comunicação: **SPI**  
-- Função:
-  - Ler cartões/chaves RFID  
-  - Implementar acesso seguro  
-  - Acionar feedback visual/sonoro  
-
----
-
-## 16. FLUXO GERAL DE FUNCIONAMENTO
-
-1. **Inicialização**
-   - ESP32 configura I2C, SPI e pinos digitais.
-   - Display mostra mensagem inicial.
-
-2. **Leitura de sensores**
-   - DHT11 envia temperatura e humidade.
-   - LDR envia valor de luminosidade.
-
-3. **RFID verifica cartão**
-   - ESP32 lê UID via SPI  
-   - Compara com lista de cartões válidos  
-
-4. **Feedback**
-   - Acesso autorizado: LED verde + mensagem no OLED  
-   - Acesso negado: LED vermelho + buzzer  
-
-5. **Monitorização contínua**
-   - Display atualizado em tempo real  
-   - LED e buzzer acionados conforme parâmetros programados  
-
----
-
-## 17. BENEFÍCIOS DA ARQUITETURA
-
-- Modular (sensores independentes)  
-- Escalável (mais sensores facilmente integráveis)  
-- Baixo consumo  
-- Integra LCD para interface com o utilizador  
-- RFID adiciona segurança  
-- Pode evoluir para IoT (ESP32 suporta WiFi / Bluetooth)  
+- O utilizador aproxima o cartão RFID do leitor.
+- O ESP32 lê a UID e comunica com o servidor.
+- O servidor regista e devolve o estado.
+- O ESP32 mostra no OLED e acende LEDs.
+- O ESP32 mede periodicamente os sensores ambientais.
+- Os valores são enviados ao servidor e guardados em MySQL.
 
 ---
 
