@@ -4,7 +4,7 @@
 
 ## Projeto
 
-**Sistema Inteligente de Monitorização e Segurança para Datacenter**
+**Sistema Inteligente de Monitorização e Segurança para SecureRoom – Proteção de Bastidores de Servidores**
 
 ## Elementos do Grupo
 
@@ -308,6 +308,7 @@ Este conjunto de guiões cobre:
 * Arduino Ide
 * Python ide
 * Base de Dados
+* Código php
 
 ---
 
@@ -334,7 +335,8 @@ Este conjunto de guiões cobre:
 * Leitor RFID RC522 montado no exterior da caixa para permitir autenticação.  
 * Cartão RFID associado aos utilizadores autorizados.
 
-*(Esquemas detalhados serão adicionados no Milestone 2.)*
+<img width="1217" height="1164" alt="image" src="https://github.com/user-attachments/assets/38eeb3f0-e339-474e-86e9-50b9aa33c25e" />
+
 
 ---
 
@@ -539,6 +541,9 @@ Este conjunto de guiões cobre:
 | Biblioteca Python: sqlite3 / MySQL / outro | Base de dados que permite guardar dados persistentes. Armazenar leituras (temperatura/humidade/movimento) e eventos (alarme). |
 | Driver USB do ESP32 | Driver de comunicação serial com o microcontrolador. Permite programar o ESP32 via cabo USB. |
 | Sistema Operativo (Windows / Linux) | Sistema onde correm Python e Arduino IDE. Execução da aplicação e suporte à programação. |
+| PHP | Usado para a ligação entre sensores, controlo de acessos e base de dados. Permite criar APIs, páginas web e gerir a comunicação entre o sistema e o utilizador. |
+
+---
 
 ## 13. DIAGRAMA DE ARQUITETURA (ASCII)
 
@@ -625,12 +630,13 @@ A arquitetura é dividida em três camadas:
 
 - RC522 (RFID) — Leitura de cartões/tag NFC.
 - DHT11 — Mede temperatura e humidade.
-- LDR + resistor — Mede luminosidade ambiente.
+- LDR — Mede luminosidade ambiente.
 
 **Atuadores:**
 
 - LED verde — acesso autorizado.
 - LED vermelho — acesso negado.
+- LED azul — (futura possível adição)
 - Buzzer — aviso sonoro.
 
 **Interface:**
@@ -704,6 +710,11 @@ A arquitetura é dividida em três camadas:
 - Os valores são enviados ao servidor e guardados em MySQL.
 
 ---
+
+## 17. Diagrama de Circuitos. 
+
+<img width="1600" height="935" alt="image" src="https://github.com/user-attachments/assets/e0c42b02-4318-44e5-a952-486470f8e8e4" />
+
 
 
 
