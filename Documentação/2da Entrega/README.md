@@ -4,7 +4,7 @@
 
 ## Projeto
 
-**Sistema Inteligente de Monitorização e Segurança para SecureRoom – Proteção de Bastidores de Servidores**
+**SecureRoom – Proteção de Bastidores de Servidores**
 
 ## Elementos do Grupo
 
