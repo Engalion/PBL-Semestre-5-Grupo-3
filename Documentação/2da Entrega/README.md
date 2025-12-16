@@ -33,7 +33,7 @@ IoT, ESP32, Segurança, Sensores, Automação, Monitorização, IA, REST API
 
 A crescente dependência de infraestruturas críticas de TI exige que salas de servidores mantenham condições ambientais e de segurança rigorosas. O presente projeto propõe o desenvolvimento de um **sistema inteligente**, baseado em IoT, capaz de monitorizar variáveis essenciais (como temperatura, humidade e acessos à sala), garantindo segurança e prevenção de incidentes.
 
-O sistema recolhe dados através de sensores instalados, envia‑os para um servidor via **REST API**, armazena numa **base de dados**, e utiliza **Inteligência Artificial** para prever o consumo energético associado ao ambiente de servidores, integrando também dados externos.
+O sistema recolhe dados através de sensores instalados, envia‑os para um servidor via REST API, armazena numa base de dados, integrando também dados externos.
 
 ---
 
