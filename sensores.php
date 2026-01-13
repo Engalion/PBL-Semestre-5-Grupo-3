@@ -22,7 +22,7 @@ if ($tipo === null || $valor === null) {
     die("Error: 'tipo' or 'valor' not provided");
 }
  
-// Comando SQL que grava os dados do sensor na base de dados
+// Comando SQL que grava os dados dos sensores na base de dados
 $sql = "INSERT INTO sensores (tipo, valor) VALUES ('$tipo', $valor)";
 
 // Executa o INSERT e confirma sucesso ou erro

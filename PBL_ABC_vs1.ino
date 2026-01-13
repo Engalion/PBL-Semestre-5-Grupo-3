@@ -1,44 +1,35 @@
 /*
- *
  * =========================================================
  *  MAPA DE PINOS – ESP32 (DevKit)
  * =========================================================
  *
- *  ALIMENTAÇÃO
+ *  3V3  -> VCC sensores
+ *  GND  -> GND comum
  *
- *    3V3  -> VCC sensores/atuadores (DHT11, PIR, RFID, OLED, etc.)
- *    GND  -> GND comum de todos os módulos
+ *  OLED (I2C)
+ *    GPIO 21 -> SDA
+ *    GPIO 22 -> SCL
  *
- *  I2C  (OLED 128x64)
- *
- *    GPIO 21 -> SDA_PIN  -> Linha de dados I2C (OLED)
- *    GPIO 22 -> SCL_PIN  -> Linha de clock I2C (OLED)
- *
- *  SENSOR DE MOVIMENTO PIR
- *
- *    GPIO 27 -> PIR_PIN  -> Saída digital do sensor PIR
+ *  PIR
+ *    GPIO 27 -> PIR
  *
  *  BUZZER
+ *    GPIO 26 -> BUZZER
  *
- *    GPIO 26 -> BUZZER_PIN -> Buzzer ativo (alarme / erro)
+ *  DHT11
+ *    GPIO 4  -> DATA
  *
- *  SENSOR DHT11 (Temperatura / Humidade)
+ *  LED RGB (catodo comum)
+ *    GPIO 13 -> R
+ *    GPIO 12 -> G
+ *    GPIO 14 -> B
  *
- *    GPIO 4 -> DHTPIN -> Pino de dados do DHT11
- *
- *  LED RGB (comum ligado ao GND)
- *
- *    GPIO 13 -> LED_R -> Canal Vermelho
- *    GPIO 12 -> LED_G -> Canal Verde
- *    GPIO 14 -> LED_B -> Canal Azul
- *
- *  MÓDULO RFID-RC522 (SPI)
- *
- *    GPIO 18 -> RFID_SCK  -> SCK
- *    GPIO 19 -> RFID_MISO -> MISO 
- *    GPIO 23 -> RFID_MOSI -> MOSI 
- *    GPIO 5  -> RFID_SS   -> SDA/SS 
- *    GPIO 2  -> RFID_RST  -> RST 
+ *  RFID RC522 (SPI)
+ *    GPIO 18 -> SCK
+ *    GPIO 19 -> MISO
+ *    GPIO 23 -> MOSI
+ *    GPIO 5  -> SS
+ *    GPIO 2  -> RST
  *
  */
 
@@ -49,28 +40,30 @@
 #include <SPI.h>
 
 #include <DHT.h>
-#include <DHT_U.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
 // ===============================
-//  CONFIG Wi-Fi / SERVIDOR
+//  WIFI / SERVIDOR
 // ===============================
 const char* WIFI_SSID = "Vodafone-85383B";
 const char* WIFI_PASS = "hWR7XWtXMJ";
 
 const char* SERVER_HOST = "192.168.1.201";
-
 String URL_SENSORES = String("http://") + SERVER_HOST + "/sensores.php";
 String URL_ACESSOS  = String("http://") + SERVER_HOST + "/acessos.php";
 
-// --- OLED ---
+// ===============================
+//  OLED
+// ===============================
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
-// --- Pinos ---
+// ===============================
+//  PINOS
+// ===============================
 #define SDA_PIN     21
 #define SCL_PIN     22
 #define PIR_PIN     27
@@ -78,13 +71,13 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 #define DHTPIN       4
 #define DHTTYPE   DHT11
 
-// --- LED RGB ---
+// LED RGB
 #define LED_R 13
 #define LED_G 12
 #define LED_B 14
 const bool COMMON_CATHODE = true;
 
-// --- RC522 (SPI) ---
+// RFID
 #define RFID_SCK   18
 #define RFID_MISO  19
 #define RFID_MOSI  23
@@ -92,197 +85,181 @@ const bool COMMON_CATHODE = true;
 #define RFID_RST    2
 MFRC522 rfid(RFID_SS, RFID_RST);
 
-// --- Cartão autorizado do RFID ---
+// UID autorizado (o teu cartão)
 byte AUT1[] = { 0x9B, 0x1E, 0xF6, 0x04 };
 
-// --- Estado / temporizações ---
+// ===============================
+//  ESTADO
+// ===============================
 DHT dht(DHTPIN, DHTTYPE);
-const bool BUZZER_ATIVO = true;
-const unsigned long DURACAO_TOQUE_MS = 1000;
-const unsigned long INTERVALO_MIN_MS  = 2000;
-unsigned long ultimoDisparo = 0;
+
+bool armado = true; // true=bloqueado, false=desbloqueado
+unsigned long unlockSince = 0;
+const unsigned long UNLOCK_DURATION_MS = 30000;  // 30s desbloqueado
 
 float tempC = NAN, hum = NAN;
 unsigned long lastDhtMs = 0;
-const unsigned long DHT_INTERVAL = 10000;
+const unsigned long DHT_INTERVAL = 10000; // envia temp/hum a cada 10s
 
-bool armado = true;
-unsigned long unlockSince = 0;
-const unsigned long UNLOCK_DURATION_MS = 30000;
+unsigned long lastMovSendMs = 0;
+const unsigned long MOV_SEND_COOLDOWN_MS = 5000; // envia "movimento" no max 1x/5s
 
-// --- RGB ---
+// Tocar o buzzer só 1x por evento (LOW->HIGH)
+int pirAnterior = LOW;
+
+// ===============================
+//  RGB
+// ===============================
 inline void setRGB(bool r, bool g, bool b) {
   if (COMMON_CATHODE) {
-    digitalWrite(LED_R, r ? HIGH : LOW);
-    digitalWrite(LED_G, g ? HIGH : LOW);
-    digitalWrite(LED_B, b ? HIGH : LOW);
+    digitalWrite(LED_R, r);
+    digitalWrite(LED_G, g);
+    digitalWrite(LED_B, b);
   } else {
-    digitalWrite(LED_R, r ? LOW : HIGH);
-    digitalWrite(LED_G, g ? LOW : HIGH);
-    digitalWrite(LED_B, b ? LOW : HIGH);
+    digitalWrite(LED_R, !r);
+    digitalWrite(LED_G, !g);
+    digitalWrite(LED_B, !b);
   }
 }
-inline void ledGreen() { setRGB(false, true, false); }
-inline void ledRed()   { setRGB(true, false, false); }
+inline void ledGreen() { setRGB(false, true,  false); } // Bloq sem mov
+inline void ledRed()   { setRGB(true,  false, false); } // Alerta/Erro
+inline void ledBlue()  { setRGB(false, false, true);  } // Desbloq
 
-void tocarBuzzer() {
-  if (BUZZER_ATIVO) {
-    digitalWrite(BUZZER_PIN, HIGH);
-    delay(DURACAO_TOQUE_MS);
-    digitalWrite(BUZZER_PIN, LOW);
+void atualizarLED(int movimento) {
+  if (!armado) ledBlue();
+  else {
+    if (movimento == HIGH) ledRed();
+    else ledGreen();
   }
 }
 
-void desenhaEcran(const char* status, int tempoRestante = -1) {
+// ===============================
+//  BUZZER
+// ===============================
+void tocarBuzzer(unsigned long durMs = 1000) {
+  digitalWrite(BUZZER_PIN, HIGH);
+  delay(durMs);
+  digitalWrite(BUZZER_PIN, LOW);
+}
+
+// ===============================
+//  OLED
+// ===============================
+void desenhaEcran(const char* status, int tempo = -1) {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
 
-  // Linha 1: Temp/Hum
   display.setCursor(0, 0);
-  if (isnan(tempC) || isnan(hum)) display.print("T: --.-C  H: --%");
-  else {
-    display.print("T: "); display.print(tempC, 1); display.print("C  ");
-    display.print("H: "); display.print((int)hum); display.print("%");
+  if (isnan(tempC) || isnan(hum)) {
+    display.print("T: --.-C  H: --%");
+  } else {
+    display.print("T: "); display.print(tempC, 1);
+    display.print("C  H: "); display.print((int)hum); display.print("%");
   }
 
-  // Linha 2-3: texto grande
-  display.setCursor(0, 16);
   display.setTextSize(2);
+  display.setCursor(0, 16);
   display.println(status);
 
-  // Linha 4: Estado Bloq/Desblq
   display.setTextSize(1);
   display.setCursor(0, 48);
   display.print("Estado: ");
   display.println(armado ? "Bloq" : "Desblq");
 
-  // Linha 5: Tempo
-  if (!armado && tempoRestante >= 0) {
+  if (!armado && tempo >= 0) {
     display.setCursor(0, 56);
     display.print("Tempo: ");
-    display.print(tempoRestante);
+    display.print(tempo);
     display.print("s");
   }
 
   display.display();
 }
 
-bool uidEquals(byte *a, byte *b, byte size) {
-  for (byte i = 0; i < size; i++)
-    if (a[i] != b[i]) return false;
-  return true;
+// UID -> String para guardar na Base de Dados
+String uidToString(const MFRC522::Uid &uid) {
+  String s = "";
+  for (byte i = 0; i < uid.size; i++) {
+    if (uid.uidByte[i] < 0x10) s += "0";
+    s += String(uid.uidByte[i], HEX);
+  }
+  s.toUpperCase();
+  return s;
 }
 
 // ===============================
-//  FUNÇÕES DE REDE / HTTP
+//  WIFI / HTTP
 // ===============================
-
 void conectarWiFi() {
-  Serial.print("A ligar ao Wi-Fi: ");
-  Serial.println(WIFI_SSID);
-
+  Serial.print("A ligar WiFi");
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  int tentativas = 0;
-  while (WiFi.status() != WL_CONNECTED && tentativas < 30) {
+  int tries = 0;
+  while (WiFi.status() != WL_CONNECTED && tries < 30) {
     delay(500);
     Serial.print(".");
-    tentativas++;
+    tries++;
   }
-
   Serial.println();
 
   if (WiFi.status() == WL_CONNECTED) {
-    Serial.print("Wi-Fi ligado! IP: ");
+    Serial.print("WiFi OK IP: ");
     Serial.println(WiFi.localIP());
   } else {
-    Serial.println("Falha ao ligar ao Wi-Fi.");
+    Serial.println("WiFi FAIL");
   }
 }
 
-// Enviar leitura de sensor (temperatura ou humidade)
-void enviarSensorParaServidor(const char* tipo, float valor) {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("Wi-Fi desligado, tentando reconectar...");
-    conectarWiFi();
-  }
+void enviarSensor(const char* tipo, float valor) {
+  if (WiFi.status() != WL_CONNECTED) conectarWiFi();
+  if (WiFi.status() != WL_CONNECTED) return;
 
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.begin(URL_SENSORES);
-    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  HTTPClient http;
+  http.begin(URL_SENSORES);
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-    String body = "tipo=";
-    body += tipo;
-    body += "&valor=";
-    body += String(valor, 1);
+  String body = "tipo=" + String(tipo) + "&valor=" + String(valor, 1);
 
-    Serial.print("POST sensores -> ");
-    Serial.println(body);
+  Serial.print("POST sensores -> ");
+  Serial.println(body);
 
-    int httpCode = http.POST(body);
-    if (httpCode > 0) {
-      String payload = http.getString();
-      Serial.print("Resposta sensores (");
-      Serial.print(httpCode);
-      Serial.print("): ");
-      Serial.println(payload);
-    } else {
-      Serial.print("Erro POST sensores: ");
-      Serial.println(httpCode);
-    }
+  int httpCode = http.POST(body);
+  String payload = http.getString();
+  Serial.print("Resposta sensores ("); Serial.print(httpCode); Serial.print("): ");
+  Serial.println(payload);
 
-    http.end();
-  }
+  http.end();
 }
 
-// Enviar acesso RFID
-void enviarAcessoParaServidor(const char* id_usuario, const char* acao) {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("Wi-Fi desligado, tentando reconectar...");
-    conectarWiFi();
-  }
+// Envia "estado=" para o acessos.php para depois comunicar com a base de dados
+void enviarAcesso(const String& id_usuario, const char* estado) {
+  if (WiFi.status() != WL_CONNECTED) conectarWiFi();
+  if (WiFi.status() != WL_CONNECTED) return;
 
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.begin(URL_ACESSOS);
-    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  HTTPClient http;
+  http.begin(URL_ACESSOS);
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-    String body = "id_usuario=";
-    body += id_usuario;
-    body += "&acao=";
-    body += acao;
+  String body = "id_usuario=" + id_usuario + "&estado=" + String(estado);
 
-    Serial.print("POST acessos -> ");
-    Serial.println(body);
+  Serial.print("POST acessos -> ");
+  Serial.println(body);
 
-    int httpCode = http.POST(body);
-    if (httpCode > 0) {
-      String payload = http.getString();
-      Serial.print("Resposta acessos (");
-      Serial.print(httpCode);
-      Serial.print("): ");
-      Serial.println(payload);
-    } else {
-      Serial.print("Erro POST acessos: ");
-      Serial.println(httpCode);
-    }
+  int httpCode = http.POST(body);
+  String payload = http.getString();
+  Serial.print("Resposta acessos ("); Serial.print(httpCode); Serial.print("): ");
+  Serial.println(payload);
 
-    http.end();
-  }
+  http.end();
 }
 
 // ===============================
 //  SETUP
 // ===============================
-
 void setup() {
   Serial.begin(115200);
-  delay(1000);
-
-  Serial.println("Inicializar sistema...");
 
   pinMode(PIR_PIN, INPUT);
   pinMode(BUZZER_PIN, OUTPUT);
@@ -292,131 +269,117 @@ void setup() {
   pinMode(LED_G, OUTPUT);
   pinMode(LED_B, OUTPUT);
 
-  ledGreen();
-
   Wire.begin(SDA_PIN, SCL_PIN);
-  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println("Erro ao iniciar OLED!");
-  }
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.clearDisplay();
   display.display();
 
   dht.begin();
-  tempC = dht.readTemperature();
-  hum = dht.readHumidity();
-  lastDhtMs = millis();
 
   SPI.begin(RFID_SCK, RFID_MISO, RFID_MOSI, RFID_SS);
   rfid.PCD_Init();
 
-  desenhaEcran("Pronto");
-
   conectarWiFi();
+
+  pirAnterior = digitalRead(PIR_PIN);
+
+  atualizarLED(digitalRead(PIR_PIN));
+  desenhaEcran("Pronto");
 }
 
 // ===============================
-//  LOOP PRINCIPAL
+//  LOOP
 // ===============================
-
 void loop() {
   unsigned long now = millis();
 
+  // tempo restante (quando desbloqueado)
   int tempoRestante = -1;
   if (!armado) {
-    long restante = UNLOCK_DURATION_MS - (now - unlockSince);
-    if (restante < 0) restante = 0;
-    tempoRestante = restante / 1000;
+    long r = (long)UNLOCK_DURATION_MS - (long)(now - unlockSince);
+    if (r < 0) r = 0;
+    tempoRestante = (int)(r / 1000);
   }
 
+  // auto-bloqueio
   if (!armado && (now - unlockSince >= UNLOCK_DURATION_MS)) {
     armado = true;
-    desenhaEcran("Bloq", -1);
-    Serial.println("Tempo expirado -> Sistema BLOQUEADO");
+    atualizarLED(digitalRead(PIR_PIN));
   }
 
-  // Atualizar DHT
+  // DHT -> BD
   if (now - lastDhtMs >= DHT_INTERVAL) {
-    float h = dht.readHumidity();
     float t = dht.readTemperature();
-    if (!isnan(h) && !isnan(t)) {
-      hum = h;
+    float h = dht.readHumidity();
+    if (!isnan(t) && !isnan(h)) {
       tempC = t;
-      Serial.print("DHT -> T: ");
-      Serial.print(tempC);
-      Serial.print(" C  H: ");
-      Serial.print(hum);
-      Serial.println(" %");
-
-      // Enviar para o servidor (2 registos: temp + hum)
-      enviarSensorParaServidor("temperatura", tempC);
-      enviarSensorParaServidor("humidade", hum);
-    } else {
-      Serial.println("Falha na leitura do DHT");
+      hum = h;
+      enviarSensor("temperatura", tempC);
+      enviarSensor("humidade", hum);
     }
     lastDhtMs = now;
   }
 
-  // RFID leitura do Cartão
+  // RFID
   if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
+    String uidStr = uidToString(rfid.uid);
 
-    Serial.print("UID lido: ");
-    for (byte i = 0; i < rfid.uid.size; i++) {
-      Serial.print(rfid.uid.uidByte[i], HEX);
-      Serial.print(" ");
-    }
-    Serial.println();
+    bool autorizado = (rfid.uid.size == 4 && memcmp(rfid.uid.uidByte, AUT1, 4) == 0);
 
-    if (rfid.uid.size == 4 && uidEquals(rfid.uid.uidByte, AUT1, 4)) {
+    if (autorizado) {
       if (armado) {
         armado = false;
         unlockSince = now;
-        ledGreen();
+        enviarAcesso(uidStr, "entrada");
         desenhaEcran("Desblq", tempoRestante);
-        Serial.println("RFID OK -> DESBLOQUEADO");
-
-        // Regista "entrada"
-        enviarAcessoParaServidor("RFID001", "entrada");
-
       } else {
         armado = true;
-        ledRed();
+        enviarAcesso(uidStr, "saida");
         desenhaEcran("Bloq", -1);
-        Serial.println("RFID OK -> BLOQUEADO");
-
-        // Regista "saida"
-        enviarAcessoParaServidor("RFID001", "saida");
       }
 
+      atualizarLED(digitalRead(PIR_PIN)); // garante azul/verde já
+
     } else {
-      // Cartão não autorizado
       armado = true;
+      enviarAcesso(uidStr, "nao_autorizado");
+
       ledRed();
-      tocarBuzzer();
+      tocarBuzzer(1000);
       desenhaEcran("RFID ERR", -1);
-      Serial.println("RFID NAO AUTORIZADO!");
       delay(2000);
+
+      atualizarLED(digitalRead(PIR_PIN));
     }
 
     rfid.PICC_HaltA();
     rfid.PCD_StopCrypto1();
   }
 
-  // PIR
+  // ===============================
+  // PIR (com buzzer 1x por evento)
+  // ===============================
   int movimento = digitalRead(PIR_PIN);
+  atualizarLED(movimento);
 
-  if (movimento == HIGH) {
-    if (armado) {
-      ledRed();
-      desenhaEcran("ALERTA!", tempoRestante);
-      tocarBuzzer();
-      Serial.println("Movimento DETECTADO com sistema ARMADO");
-    } else {
-      ledGreen();
-      desenhaEcran("Movimento", tempoRestante);
-      Serial.println("Movimento detectado (sistema desarmado)");
-    }
+  // toca só quando o movimento começa (LOW -> HIGH) e está bloqueado
+  if (armado && pirAnterior == LOW && movimento == HIGH) {
+    tocarBuzzer(1000);
+  }
+  pirAnterior = movimento;
+
+  // movimento -> BD
+  if (movimento == HIGH && (now - lastMovSendMs >= MOV_SEND_COOLDOWN_MS)) {
+    enviarSensor("movimento", 1);
+    lastMovSendMs = now;
+  }
+
+  // OLED
+  if (movimento == HIGH && armado) {
+    desenhaEcran("ALERTA!", tempoRestante);
+  } else if (movimento == HIGH) {
+    desenhaEcran("Movimento", tempoRestante);
   } else {
-    ledGreen();
     desenhaEcran(armado ? "Sem Mov" : "Clear", tempoRestante);
   }
 
