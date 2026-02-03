@@ -1060,8 +1060,9 @@ Como possíveis evoluções deste módulo, destacam-se:
 - ajuste dinâmico dos parâmetros do modelo;
 - avaliação quantitativa do erro de previsão através de métricas estatísticas.
 
+--- 
 
-### 32. Resumo. 
+## 32. Resumo. 
 
 A implementação do modelo ARIMA permitiu dotar o projeto de uma componente preditiva
 sólida e tecnicamente fundamentada.
