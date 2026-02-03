@@ -878,7 +878,11 @@ Bibliotecas usadas no Arduino (display e gráficos).
 
 ---
 
-## 21. Enquadramento
+## 21. Inteligência Artificial 
+
+---
+
+# 21.1 Enquadramento
 
 No contexto do projeto desenvolvido no âmbito do Problem Based Learning (PBL) do quinto
 semestre, foi implementado um módulo de previsão de temperatura com o objetivo de enriquecer
@@ -889,7 +893,7 @@ ao sistema e aproximando-o de um cenário real de monitorização inteligente.
 
 ---
 
-## 22. Fundamentação Teórica do Modelo ARIMA
+# 21.2 Fundamentação Teórica do Modelo ARIMA
 
 Para a realização das previsões foi selecionado o modelo **ARIMA (AutoRegressive Integrated
 Moving Average)**, um dos modelos estatísticos mais utilizados na análise de séries temporais.
@@ -912,7 +916,7 @@ A escolha do modelo ARIMA revelou-se adequada ao contexto do projeto, uma vez qu
 
 ---
 
-## 23. Caracterização e Preparação dos Dados
+# 21.3 Caracterização e Preparação dos Dados
 
 Os dados utilizados neste módulo correspondem a leituras históricas de temperatura, recolhidas ao
 longo do tempo com intervalos regulares.
@@ -928,7 +932,7 @@ e consistência da série temporal utilizada.
 
 ---
 
-## 24. Arquitetura da Implementação
+# 21.4 Arquitetura da Implementação
 
 A implementação do modelo ARIMA foi realizada em **Python**, estando organizada de forma
 modular no repositório do projeto, o que facilita a manutenção, reutilização e evolução do sistema.
@@ -942,7 +946,7 @@ sistema.
 
 ---
 
-## 25. Treino do Modelo
+# 21.5 Treino do Modelo
 
 O treino do modelo ARIMA é realizado através de um script dedicado, responsável por:
 - carregar os dados históricos de temperatura;
@@ -956,7 +960,7 @@ sempre que uma previsão é solicitada, tornando o sistema mais eficiente e esca
 
 ---
 
-## 26. Processo de Previsão
+# 21.6 Processo de Previsão
 
 A fase de previsão utiliza o modelo previamente treinado para estimar valores futuros da
 temperatura.
@@ -974,7 +978,7 @@ dessas previsões.
 
 ---
 
-## 27. Visualização e Interpretação dos Resultados
+# 21.7 Visualização e Interpretação dos Resultados
 
 Os resultados obtidos são apresentados sob a forma de gráficos temporais.
 
@@ -1007,7 +1011,7 @@ refletindo a incerteza inerente ao processo de previsão.
 
 ---
 
-## 28. Análise dos Resultados Obtidos
+# 21.8 Análise dos Resultados Obtidos
 
 A análise dos resultados obtidos através do modelo ARIMA permite compreender o
 comportamento geral da temperatura ao longo do horizonte de previsão, bem como a confiança
@@ -1027,7 +1031,7 @@ confirmando a sua adequação ao contexto do projeto.
 
 ---
 
-## 29. Integração no Projeto Global
+# 21.9 Integração no Projeto Global
 
 O módulo de previsão foi concebido para ser facilmente integrado no sistema global do projeto,
 podendo ser utilizado para:
@@ -1040,7 +1044,7 @@ sem comprometer o desempenho do sistema principal.
 
 ---
 
-## 30. Limitações do Modelo
+# 21.10 Limitações do Modelo
 
 Apesar dos resultados positivos, foram identificadas algumas limitações:
 - o modelo ARIMA não considera variáveis externas, como humidade ou pressão atmosférica;
@@ -1052,7 +1056,7 @@ objetivos definidos.
 
 ---
 
-## 31. Perspetivas de Trabalho Futuro
+# 21.11 Perspetivas de Trabalho Futuro
 
 Como possíveis evoluções deste módulo, destacam-se:
 - utilização de modelos **ARIMAX** com variáveis exógenas;
@@ -1062,7 +1066,7 @@ Como possíveis evoluções deste módulo, destacam-se:
 
 --- 
 
-## 32. Resumo. 
+# 21.12 Resumo. 
 
 A implementação do modelo ARIMA permitiu dotar o projeto de uma componente preditiva
 sólida e tecnicamente fundamentada.
