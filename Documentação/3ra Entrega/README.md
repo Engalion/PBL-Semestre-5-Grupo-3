@@ -809,8 +809,6 @@ A Eficiência de Remoção de Defeitos (ERD) avalia a capacidade da equipa em id
 
 <img width="870" height="1536" alt="image" src="https://github.com/user-attachments/assets/6e584577-0b1f-4cc1-b2c6-68d9834b2127" />
 
-# Estrutura do Projeto
-
 ## 📁 Raiz (C:\)
 Arquivos gerais do projeto, principalmente o banco de dados.
 
