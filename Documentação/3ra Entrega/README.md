@@ -812,10 +812,10 @@ A Eficiência de Remoção de Defeitos (ERD) avalia a capacidade da equipa em id
 ## 📁 Raiz (C:\)
 Arquivos gerais do projeto, principalmente o banco de dados.
 
--acessos.sql → script SQL responsável pela criação e gestão da tabela de registo de acessos, onde ficam armazenadas as entradas dos utilizadores no sistema
--users.sql → script SQL que define a estrutura da tabela de utilizadores, incluindo credenciais, permissões e dados de identificação
--sensores.sql → script SQL que cria a tabela dos sensores, responsável por armazenar leituras como temperatura ou outros dados ambientais
--PBL_BD.sql → ficheiro SQL completo com todo o banco de dados do projeto, incluindo tabelas, relações e dados iniciais 
+- acessos.sql → script SQL responsável pela criação e gestão da tabela de registo de acessos, onde ficam armazenadas as entradas dos utilizadores no sistema
+- users.sql → script SQL que define a estrutura da tabela de utilizadores, incluindo credenciais, permissões e dados de identificação
+- sensores.sql → script SQL que cria a tabela dos sensores, responsável por armazenar leituras como temperatura ou outros dados ambientais
+- PBL_BD.sql → ficheiro SQL completo com todo o banco de dados do projeto, incluindo tabelas, relações e dados iniciais 
 
 ---
 
@@ -824,11 +824,11 @@ Pasta do servidor web (Apache/XAMPP). Tudo aqui faz parte do dashboard.
 
 ### Arquivos principais
 
--index.php → página principal do dashboard, onde são apresentados dados gerais do sistema após o login
--login.php → interface gráfica de autenticação, permitindo ao utilizador iniciar sessão no sistema
--logout.php → script responsável por terminar a sessão ativa do utilizador de forma segura
--auth.php → módulo de controlo de autenticação e permissões de acesso às páginas
--db.php → ficheiro de ligação à base de dados MySQL, utilizado por todo o sistema
+- index.php → página principal do dashboard, onde são apresentados dados gerais do sistema após o login
+- login.php → interface gráfica de autenticação, permitindo ao utilizador iniciar sessão no sistema
+- logout.php → script responsável por terminar a sessão ativa do utilizador de forma segura
+- auth.php → módulo de controlo de autenticação e permissões de acesso às páginas
+- db.php → ficheiro de ligação à base de dados MySQL, utilizado por todo o sistema
 
 <img width="1203" height="901" alt="index_1_Admin" src="https://github.com/user-attachments/assets/0507b608-2e50-4a89-ab80-b55e33a25139" />
 
@@ -848,11 +848,11 @@ Index User 2
 
 ### Funcionalidades
 
--acessos.php → página que apresenta o histórico de acessos dos utilizadores ao sistema
--sensores.php → interface de visualização dos dados recolhidos pelos sensores em tempo real ou histórico
--graficos.php → página dedicada à apresentação gráfica dos dados dos sensores
--forecast.php → interface onde são exibidas previsões futuras com base nos modelos de Inteligência Artificial
--export_csv.php → funcionalidade que permite exportar dados do sistema para ficheiros CSV 
+- acessos.php → página que apresenta o histórico de acessos dos utilizadores ao sistema
+- sensores.php → interface de visualização dos dados recolhidos pelos sensores em tempo real ou histórico
+- graficos.php → página dedicada à apresentação gráfica dos dados dos sensores
+- forecast.php → interface onde são exibidas previsões futuras com base nos modelos de Inteligência Artificial
+- export_csv.php → funcionalidade que permite exportar dados do sistema para ficheiros CSV 
 
 <img width="1033" height="657" alt="graficos_1" src="https://github.com/user-attachments/assets/a17a9b60-9116-476d-8ead-6d8250a28f9a" />
 
@@ -883,9 +883,9 @@ Gráficos 3
 ## 📁 htdocs/ai
 Módulos de Inteligência Artificial em Python.
 
--train_arima_temp.py → script responsável pelo treino do modelo ARIMA para previsão de temperatura
--model_temp_arima.pkl → ficheiro do modelo ARIMA já treinado e serializado
--forecast_temp.py → script que utiliza o modelo treinado para gerar previsões futuras
+- train_arima_temp.py → script responsável pelo treino do modelo ARIMA para previsão de temperatura
+- model_temp_arima.pkl → ficheiro do modelo ARIMA já treinado e serializado
+- forecast_temp.py → script que utiliza o modelo treinado para gerar previsões futuras
 
 <img width="1200" height="722" alt="forecast_1" src="https://github.com/user-attachments/assets/e454aee7-0086-4bd3-bf58-7bc67a0789a6" />
 
@@ -925,7 +925,7 @@ Bibliotecas usadas no Arduino (display e gráficos).
 
 ---
 
-# 21.1 Enquadramento
+### 21.1 Enquadramento
 
 No contexto do projeto desenvolvido no âmbito do Problem Based Learning (PBL) do quinto
 semestre, foi implementado um módulo de previsão de temperatura com o objetivo de enriquecer
@@ -936,7 +936,7 @@ ao sistema e aproximando-o de um cenário real de monitorização inteligente.
 
 ---
 
-# 21.2 Fundamentação Teórica do Modelo ARIMA
+### 21.2 Fundamentação Teórica do Modelo ARIMA
 
 Para a realização das previsões foi selecionado o modelo **ARIMA (AutoRegressive Integrated
 Moving Average)**, um dos modelos estatísticos mais utilizados na análise de séries temporais.
@@ -959,7 +959,7 @@ A escolha do modelo ARIMA revelou-se adequada ao contexto do projeto, uma vez qu
 
 ---
 
-# 21.3 Caracterização e Preparação dos Dados
+### 21.3 Caracterização e Preparação dos Dados
 
 Os dados utilizados neste módulo correspondem a leituras históricas de temperatura, recolhidas ao
 longo do tempo com intervalos regulares.
@@ -975,7 +975,7 @@ e consistência da série temporal utilizada.
 
 ---
 
-# 21.4 Arquitetura da Implementação
+### 21.4 Arquitetura da Implementação
 
 A implementação do modelo ARIMA foi realizada em **Python**, estando organizada de forma
 modular no repositório do projeto, o que facilita a manutenção, reutilização e evolução do sistema.
@@ -989,7 +989,7 @@ sistema.
 
 ---
 
-# 21.5 Treino do Modelo
+### 21.5 Treino do Modelo
 
 O treino do modelo ARIMA é realizado através de um script dedicado, responsável por:
 - carregar os dados históricos de temperatura;
@@ -1003,7 +1003,7 @@ sempre que uma previsão é solicitada, tornando o sistema mais eficiente e esca
 
 ---
 
-# 21.6 Processo de Previsão
+### 21.6 Processo de Previsão
 
 A fase de previsão utiliza o modelo previamente treinado para estimar valores futuros da
 temperatura.
@@ -1021,7 +1021,7 @@ dessas previsões.
 
 ---
 
-# 21.7 Visualização e Interpretação dos Resultados
+### 21.7 Visualização e Interpretação dos Resultados
 
 Os resultados obtidos são apresentados sob a forma de gráficos temporais.
 
@@ -1054,7 +1054,7 @@ refletindo a incerteza inerente ao processo de previsão.
 
 ---
 
-# 21.8 Análise dos Resultados Obtidos
+### 21.8 Análise dos Resultados Obtidos
 
 A análise dos resultados obtidos através do modelo ARIMA permite compreender o
 comportamento geral da temperatura ao longo do horizonte de previsão, bem como a confiança
@@ -1074,7 +1074,7 @@ confirmando a sua adequação ao contexto do projeto.
 
 ---
 
-# 21.9 Integração no Projeto Global
+### 21.9 Integração no Projeto Global
 
 O módulo de previsão foi concebido para ser facilmente integrado no sistema global do projeto,
 podendo ser utilizado para:
@@ -1087,7 +1087,7 @@ sem comprometer o desempenho do sistema principal.
 
 ---
 
-# 21.10 Limitações do Modelo
+### 21.10 Limitações do Modelo
 
 Apesar dos resultados positivos, foram identificadas algumas limitações:
 - o modelo ARIMA não considera variáveis externas, como humidade ou pressão atmosférica;
@@ -1099,7 +1099,7 @@ objetivos definidos.
 
 ---
 
-# 21.11 Perspetivas de Trabalho Futuro
+### 21.11 Perspetivas de Trabalho Futuro
 
 Como possíveis evoluções deste módulo, destacam-se:
 - Utilização de modelos **ARIMAX** com variáveis exógenas;
@@ -1109,15 +1109,7 @@ Como possíveis evoluções deste módulo, destacam-se:
 
 --- 
 
-# 21.13. Imagens
-
-<img width="1202" height="507" alt="admin_cards" src="https://github.com/user-attachments/assets/f5f4feb0-9e90-4592-b88e-1584ef7dc8e9" />
-
-
-<img width="1202" height="562" alt="admin_users" src="https://github.com/user-attachments/assets/3fbc4e6f-458d-4a88-a0b0-859969b42e59" />
-
-
-# 21.14. Resumo
+### 21.13 Resumo
 
 A implementação do modelo ARIMA permitiu dotar o projeto de uma componente preditiva
 sólida e tecnicamente fundamentada.
