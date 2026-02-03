@@ -889,7 +889,179 @@ ao sistema e aproximando-o de um cenário real de monitorização inteligente.
 
 ---
 
-### 22. Resumo. 
+## 22. Fundamentação Teórica do Modelo ARIMA
+
+Para a realização das previsões foi selecionado o modelo **ARIMA (AutoRegressive Integrated
+Moving Average)**, um dos modelos estatísticos mais utilizados na análise de séries temporais.
+
+O modelo ARIMA baseia-se no pressuposto de que valores futuros de uma série temporal podem ser
+estimados a partir de:
+- dependência temporal (valores passados);
+- estrutura de tendência presente nos dados;
+- erros cometidos em previsões anteriores.
+
+O modelo é definido por três parâmetros fundamentais:
+- **p (AutoRegressivo – AR)**: número de observações passadas consideradas;
+- **d (Integração – I)**: número de diferenciações aplicadas para garantir estacionaridade;
+- **q (Média Móvel – MA)**: número de termos de erro incluídos no modelo.
+
+A escolha do modelo ARIMA revelou-se adequada ao contexto do projeto, uma vez que:
+- os dados de temperatura constituem uma série temporal univariada;
+- o objetivo principal é a previsão de curto prazo;
+- o modelo apresenta baixo custo computacional e elevada interpretabilidade.
+
+---
+
+## 23. Caracterização e Preparação dos Dados
+
+Os dados utilizados neste módulo correspondem a leituras históricas de temperatura, recolhidas ao
+longo do tempo com intervalos regulares.
+
+Antes da aplicação do modelo, foi necessária uma preparação cuidada dos dados, incluindo:
+- ordenação cronológica da série temporal;
+- análise visual do comportamento da temperatura;
+- verificação da existência de tendência;
+- adequação do formato dos dados aos requisitos do modelo ARIMA.
+
+Este processo é fundamental, uma vez que a eficácia do modelo depende diretamente da qualidade
+e consistência da série temporal utilizada.
+
+---
+
+## 24. Arquitetura da Implementação
+
+A implementação do modelo ARIMA foi realizada em **Python**, estando organizada de forma
+modular no repositório do projeto, o que facilita a manutenção, reutilização e evolução do sistema.
+
+A arquitetura adotada separa claramente duas fases distintas:
+1. Treino do modelo  
+2. Geração de previsões (forecast)
+
+Esta separação reflete boas práticas de engenharia de software e contribui para a eficiência do
+sistema.
+
+---
+
+## 25. Treino do Modelo
+
+O treino do modelo ARIMA é realizado através de um script dedicado, responsável por:
+- carregar os dados históricos de temperatura;
+- ajustar o modelo ARIMA à série temporal;
+- estimar automaticamente os parâmetros do modelo;
+- validar o ajustamento aos dados observados;
+- guardar o modelo treinado para utilização posterior.
+
+Ao guardar o modelo treinado, evita-se a necessidade de reexecutar todo o processo de treino
+sempre que uma previsão é solicitada, tornando o sistema mais eficiente e escalável.
+
+---
+
+## 26. Processo de Previsão
+
+A fase de previsão utiliza o modelo previamente treinado para estimar valores futuros da
+temperatura.
+
+Foram considerados diferentes horizontes temporais de previsão:
+- previsão para os próximos **60 minutos**;
+- previsão para os próximos **180 minutos**.
+
+Para cada previsão, o modelo produz:
+- valores estimados de temperatura;
+- intervalos de confiança a **95%**, que quantificam a incerteza associada às previsões.
+
+Esta abordagem permite não apenas prever valores futuros, mas também avaliar a fiabilidade
+dessas previsões.
+
+---
+
+## 27. Visualização e Interpretação dos Resultados
+
+Os resultados obtidos são apresentados sob a forma de gráficos temporais.
+
+Nas figuras seguintes são apresentados os resultados do forecast obtidos para diferentes horizontes
+temporais:
+
+<img width="630" height="365" alt="image" src="https://github.com/user-attachments/assets/e8625664-30a1-4d52-b43c-e37ac83192a2" />
+
+- **Figura 1** – Previsão da temperatura para os próximos 60 minutos (modelo ARIMA)  
+  *Fonte: Elaboração própria*
+
+<img width="624" height="334" alt="image" src="https://github.com/user-attachments/assets/0f3f65b9-7a2c-471e-8b74-d52ea1b0bbbd" />
+
+- **Figura 2** – Previsão da temperatura para os próximos 180 minutos (modelo ARIMA)  
+  *Fonte: Elaboração própria*
+
+Os gráficos incluem três componentes principais:
+
+# Dados Históricos
+Representados por pontos azuis, correspondem às medições reais de temperatura utilizadas como
+base para o modelo.
+
+# Linha de Previsão
+Representada por uma linha contínua, indica o valor médio esperado da temperatura ao longo do
+horizonte de previsão.
+
+# Intervalo de Confiança
+A área sombreada em torno da linha de previsão representa o intervalo de confiança a 95%,
+refletindo a incerteza inerente ao processo de previsão.
+
+---
+
+## 28. Análise dos Resultados Obtidos
+
+A análise dos resultados obtidos através do modelo ARIMA permite compreender o
+comportamento geral da temperatura ao longo do horizonte de previsão, bem como a confiança
+associada às estimativas produzidas.
+
+A linha de previsão representa a tendência esperada da temperatura com base nos dados históricos.
+Uma inclinação ascendente indica uma tendência de aumento da temperatura, enquanto uma
+inclinação descendente sugere uma diminuição gradual da temperatura prevista.
+
+O intervalo de confiança fornece informação relevante sobre a incerteza do modelo. Intervalos
+mais estreitos indicam maior confiança nas previsões, enquanto intervalos mais amplos refletem
+um aumento da incerteza, fenómeno comum à medida que o horizonte temporal aumenta.
+
+De um modo geral, os resultados demonstram que o modelo ARIMA é capaz de capturar o
+comportamento recente da série temporal, fornecendo previsões coerentes e interpretáveis,
+confirmando a sua adequação ao contexto do projeto.
+
+---
+
+## 29. Integração no Projeto Global
+
+O módulo de previsão foi concebido para ser facilmente integrado no sistema global do projeto,
+podendo ser utilizado para:
+- enriquecer dashboards de monitorização;
+- apoiar decisões baseadas em tendências futuras;
+- complementar análises descritivas com informação preditiva.
+
+A modularidade da implementação permite que este componente funcione de forma autónoma,
+sem comprometer o desempenho do sistema principal.
+
+---
+
+## 30. Limitações do Modelo
+
+Apesar dos resultados positivos, foram identificadas algumas limitações:
+- o modelo ARIMA não considera variáveis externas, como humidade ou pressão atmosférica;
+- pode apresentar menor robustez face a alterações abruptas no padrão dos dados;
+- o seu desempenho é mais eficaz em previsões de curto prazo.
+
+Estas limitações são reconhecidas no contexto do projeto e consideradas aceitáveis face aos
+objetivos definidos.
+
+---
+
+## 31. Perspetivas de Trabalho Futuro
+
+Como possíveis evoluções deste módulo, destacam-se:
+- utilização de modelos **ARIMAX** com variáveis exógenas;
+- comparação com modelos de *machine learning*;
+- ajuste dinâmico dos parâmetros do modelo;
+- avaliação quantitativa do erro de previsão através de métricas estatísticas.
+
+
+### 32. Resumo. 
 
 A implementação do modelo ARIMA permitiu dotar o projeto de uma componente preditiva
 sólida e tecnicamente fundamentada.
