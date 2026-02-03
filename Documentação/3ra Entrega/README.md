@@ -812,10 +812,10 @@ A Eficiência de Remoção de Defeitos (ERD) avalia a capacidade da equipa em id
 ## 📁 Raiz (C:\)
 Arquivos gerais do projeto, principalmente o banco de dados.
 
-- acessos.sql → script SQL da tabela de acessos  
-- users.sql → script SQL da tabela de usuários  
-- sensores.sql → script SQL da tabela de sensores  
-- PBL_BD.sql → banco de dados completo do projeto  
+-acessos.sql → script SQL responsável pela criação e gestão da tabela de registo de acessos, onde ficam armazenadas as entradas dos utilizadores no sistema
+-users.sql → script SQL que define a estrutura da tabela de utilizadores, incluindo credenciais, permissões e dados de identificação
+-sensores.sql → script SQL que cria a tabela dos sensores, responsável por armazenar leituras como temperatura ou outros dados ambientais
+-PBL_BD.sql → ficheiro SQL completo com todo o banco de dados do projeto, incluindo tabelas, relações e dados iniciais 
 
 ---
 
@@ -823,22 +823,57 @@ Arquivos gerais do projeto, principalmente o banco de dados.
 Pasta do servidor web (Apache/XAMPP). Tudo aqui faz parte do dashboard.
 
 ### Arquivos principais
-- index.php → página inicial  
-- login.php → tela de login  
-- logout.php → encerra a sessão  
-- auth.php → controle de autenticação  
-- db.php → conexão com o banco de dados  
+
+-index.php → página principal do dashboard, onde são apresentados dados gerais do sistema após o login
+-login.php → interface gráfica de autenticação, permitindo ao utilizador iniciar sessão no sistema
+-logout.php → script responsável por terminar a sessão ativa do utilizador de forma segura
+-auth.php → módulo de controlo de autenticação e permissões de acesso às páginas
+-db.php → ficheiro de ligação à base de dados MySQL, utilizado por todo o sistema
+
+<img width="1203" height="901" alt="index_1_Admin" src="https://github.com/user-attachments/assets/0507b608-2e50-4a89-ab80-b55e33a25139" />
+
+Index Admin 1
+
+<img width="1204" height="905" alt="index_2_Admin" src="https://github.com/user-attachments/assets/ae26793d-b558-4a60-83c7-29cfcdf5e46b" />
+
+Index Admin 2
+
+<img width="1200" height="1267" alt="index_1_User" src="https://github.com/user-attachments/assets/ea1eaf01-40d6-4e9c-bc4d-5643d863fc4c" />
+
+Index User 1
+
+<img width="1201" height="1254" alt="index_2_User" src="https://github.com/user-attachments/assets/36bb2a0c-9a02-403b-be2a-1b941ce6a204" />
+
+Index User 2
 
 ### Funcionalidades
-- acessos.php → visualização dos acessos  
-- sensores.php → dados dos sensores  
-- graficos.php → gráficos do sistema  
-- forecast.php → página de previsões  
-- export_csv.php → exportação de dados em CSV  
+
+-acessos.php → página que apresenta o histórico de acessos dos utilizadores ao sistema
+-sensores.php → interface de visualização dos dados recolhidos pelos sensores em tempo real ou histórico
+-graficos.php → página dedicada à apresentação gráfica dos dados dos sensores
+-forecast.php → interface onde são exibidas previsões futuras com base nos modelos de Inteligência Artificial
+-export_csv.php → funcionalidade que permite exportar dados do sistema para ficheiros CSV 
+
+<img width="1033" height="657" alt="graficos_1" src="https://github.com/user-attachments/assets/a17a9b60-9116-476d-8ead-6d8250a28f9a" />
+
+Gráficos 1
+
+<img width="1033" height="558" alt="graficos_2" src="https://github.com/user-attachments/assets/32126a2e-f74b-4d1e-8194-f427bd2ecbfe" />
+
+Gráficos 2
+
+<img width="1032" height="578" alt="graficos_3" src="https://github.com/user-attachments/assets/986aaf70-4b7b-4b7b-84a6-b852d80fce6f" />
+
+Gráficos 3
 
 ### Administração
-- admin_users.php → gerenciamento de usuários  
-- admin_cards.php → gerenciamento de cartões  
+- admin_users.php → painel de administração para criação, edição e remoção de utilizadores
+  
+  <img width="1202" height="562" alt="admin_users" src="https://github.com/user-attachments/assets/e7a1e93f-a176-4215-9204-00e0aa8f1afa" />
+
+- admin_cards.php → interface de gestão de cartões de acesso associados aos utilizadores
+
+  <img width="1202" height="507" alt="admin_cards" src="https://github.com/user-attachments/assets/47219647-1ac9-4aa2-b4fb-ea80efce4ab3" />
 
 ### Estilo
 - style.css → aparência do site  
@@ -848,9 +883,17 @@ Pasta do servidor web (Apache/XAMPP). Tudo aqui faz parte do dashboard.
 ## 📁 htdocs/ai
 Módulos de Inteligência Artificial em Python.
 
-- train_arima_temp.py → treino do modelo ARIMA  
-- model_temp_arima.pkl → modelo treinado  
-- forecast_temp.py → previsão usando o modelo  
+-train_arima_temp.py → script responsável pelo treino do modelo ARIMA para previsão de temperatura
+-model_temp_arima.pkl → ficheiro do modelo ARIMA já treinado e serializado
+-forecast_temp.py → script que utiliza o modelo treinado para gerar previsões futuras
+
+<img width="1200" height="722" alt="forecast_1" src="https://github.com/user-attachments/assets/e454aee7-0086-4bd3-bf58-7bc67a0789a6" />
+
+Primeira visualização de previsões (forecast), exibindo dados projetados ao longo do tempo, provavelmente através de gráficos ou tabelas que representam tendências futuras baseadas em dados históricos.
+
+<img width="1201" height="642" alt="forescst_2" src="https://github.com/user-attachments/assets/fb884429-d99d-4c8e-8c77-72931046bf6b" />
+
+Segunda tela de previsões, complementando a anterior, possivelmente com outro tipo de gráfico, comparação entre cenários ou detalhamento adicional das projeções.
 
 ---
 
@@ -997,15 +1040,15 @@ temporais:
 
 Os gráficos incluem três componentes principais:
 
-# Dados Históricos
+**Dados Históricos**
 Representados por pontos azuis, correspondem às medições reais de temperatura utilizadas como
 base para o modelo.
 
-# Linha de Previsão
+**Linha de Previsão**
 Representada por uma linha contínua, indica o valor médio esperado da temperatura ao longo do
 horizonte de previsão.
 
-# Intervalo de Confiança
+**Intervalo de Confiança**
 A área sombreada em torno da linha de previsão representa o intervalo de confiança a 95%,
 refletindo a incerteza inerente ao processo de previsão.
 
@@ -1035,9 +1078,9 @@ confirmando a sua adequação ao contexto do projeto.
 
 O módulo de previsão foi concebido para ser facilmente integrado no sistema global do projeto,
 podendo ser utilizado para:
-- enriquecer dashboards de monitorização;
-- apoiar decisões baseadas em tendências futuras;
-- complementar análises descritivas com informação preditiva.
+- Enriquecer dashboards de monitorização;
+- Apoiar decisões baseadas em tendências futuras;
+- Complementar análises descritivas com informação preditiva.
 
 A modularidade da implementação permite que este componente funcione de forma autónoma,
 sem comprometer o desempenho do sistema principal.
@@ -1059,14 +1102,22 @@ objetivos definidos.
 # 21.11 Perspetivas de Trabalho Futuro
 
 Como possíveis evoluções deste módulo, destacam-se:
-- utilização de modelos **ARIMAX** com variáveis exógenas;
-- comparação com modelos de *machine learning*;
-- ajuste dinâmico dos parâmetros do modelo;
-- avaliação quantitativa do erro de previsão através de métricas estatísticas.
+- Utilização de modelos **ARIMAX** com variáveis exógenas;
+- Comparação com modelos de *machine learning*;
+- Ajuste dinâmico dos parâmetros do modelo;
+- Avaliação quantitativa do erro de previsão através de métricas estatísticas.
 
 --- 
 
-# 21.12 Resumo. 
+# 21.13. Imagens
+
+<img width="1202" height="507" alt="admin_cards" src="https://github.com/user-attachments/assets/f5f4feb0-9e90-4592-b88e-1584ef7dc8e9" />
+
+
+<img width="1202" height="562" alt="admin_users" src="https://github.com/user-attachments/assets/3fbc4e6f-458d-4a88-a0b0-859969b42e59" />
+
+
+# 21.14. Resumo
 
 A implementação do modelo ARIMA permitiu dotar o projeto de uma componente preditiva
 sólida e tecnicamente fundamentada.
