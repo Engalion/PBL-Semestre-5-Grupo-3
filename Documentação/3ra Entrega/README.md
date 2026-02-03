@@ -803,3 +803,98 @@ A Eficiência de Remoção de Defeitos (ERD) avalia a capacidade da equipa em id
 **Meta:**
 - Garantir que nenhum defeito de severidade crítica permanece no sistema, nomeadamente falhas de deteção ou perda de dados.
 
+---
+
+## 20. Estrutura do Projeto
+
+<img width="870" height="1536" alt="image" src="https://github.com/user-attachments/assets/6e584577-0b1f-4cc1-b2c6-68d9834b2127" />
+
+# Estrutura do Projeto
+
+## 📁 Raiz (C:\)
+Arquivos gerais do projeto, principalmente o banco de dados.
+
+- acessos.sql → script SQL da tabela de acessos  
+- users.sql → script SQL da tabela de usuários  
+- sensores.sql → script SQL da tabela de sensores  
+- PBL_BD.sql → banco de dados completo do projeto  
+
+---
+
+## 📁 htdocs
+Pasta do servidor web (Apache/XAMPP). Tudo aqui faz parte do dashboard.
+
+### Arquivos principais
+- index.php → página inicial  
+- login.php → tela de login  
+- logout.php → encerra a sessão  
+- auth.php → controle de autenticação  
+- db.php → conexão com o banco de dados  
+
+### Funcionalidades
+- acessos.php → visualização dos acessos  
+- sensores.php → dados dos sensores  
+- graficos.php → gráficos do sistema  
+- forecast.php → página de previsões  
+- export_csv.php → exportação de dados em CSV  
+
+### Administração
+- admin_users.php → gerenciamento de usuários  
+- admin_cards.php → gerenciamento de cartões  
+
+### Estilo
+- style.css → aparência do site  
+
+---
+
+## 📁 htdocs/ai
+Módulos de Inteligência Artificial em Python.
+
+- train_arima_temp.py → treino do modelo ARIMA  
+- model_temp_arima.pkl → modelo treinado  
+- forecast_temp.py → previsão usando o modelo  
+
+---
+
+## 📁 htdocs/api
+API para comunicação entre site, IA e dispositivos.
+
+- data.php → fornece dados via API  
+- forecast_temp.php → endpoint de previsão de temperatura  
+
+---
+
+## 📁 PBL_ABC_vs1
+Código do Arduino.
+
+- PBL_ABC_vs1.ino → código principal do microcontrolador  
+
+---
+
+## 📁 PBL_ABC_vs1/data
+Bibliotecas usadas no Arduino (display e gráficos).
+
+- Adafruit-GFX-Library  
+- Adafruit_SSD1306  
+- u8g2  
+
+---
+
+## 21. Enquadramento
+
+No contexto do projeto desenvolvido no âmbito do Problem Based Learning (PBL) do quinto
+semestre, foi implementado um módulo de previsão de temperatura com o objetivo de enriquecer
+o sistema com uma componente preditiva baseada em dados históricos.
+A inclusão de um mecanismo de previsão permite não só analisar o comportamento passado da
+variável temperatura, mas também antecipar a sua evolução futura, acrescentando valor analítico
+ao sistema e aproximando-o de um cenário real de monitorização inteligente.
+
+---
+
+### 22. Resumo. 
+
+A implementação do modelo ARIMA permitiu dotar o projeto de uma componente preditiva
+sólida e tecnicamente fundamentada.
+O módulo desenvolvido demonstra a aplicação prática de conceitos de análise de séries
+temporais, integrando-se de forma coerente no sistema global do PBL e contribuindo para a
+maturidade técnica do projeto.
