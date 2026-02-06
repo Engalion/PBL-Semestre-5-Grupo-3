@@ -360,17 +360,17 @@ Este conjunto de guiões cobre:
 
 ## **Tarefas Principais**
 
-* T1 — Definição do problema
-* T2 — Seleção de sensores
-* T3 — Desenvolvimento do protótipo
-* T4 — API REST
-* T5 — Base de dados
-* T6 — IA – recolha e tratamento de dados
-* T7 — IA – treino do modelo
-* T8 — Testes
-* T9 — Documentação e apresentação
-
-<img width="954" height="572" alt="image" src="https://github.com/user-attachments/assets/c4d4e160-37d7-413a-ab15-e92961f732c7" />
+| Tarefa | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 |
+|-------|---|---|---|---|---|---|---|---|---|----|----|----|----|----|
+| T1 — Definição do problema | ■ |   |   |   |   |   |   |   |   |    |    |    |    |    |
+| T2 — Seleção de sensores |   | ■ |   |   |   |   |   |   |   |    |    |    |    |    |
+| T3 — Protótipo ESP32 (ESP32 + PIR + DHT + OLED + buzzer + LED RGB + RFID) |   |   | ■ | ■ |   |   |   |   |   |    |    |    |    |    |
+| T4 — API REST (leituras JSON, validação e resposta) |   |   |   |   | ■ | ■ |   |   |   |    |    |    |    |    |
+| T5 — Base de dados (tabelas, inserts, testes, ligação API) |   |   |   |   |   |   | ■ | ■ |   |    |    |    |    |    |
+| T6 — IA: recolha / tratamento (preparação dataset) |   |   |   |   |   |   |   |   | ■ | ■  |    |    |    |    |
+| T7 — IA: treino / validação (ARIMA / modelo + previsão) |   |   |   |   |   |   |   |   |   |    | ■  | ■  |    |    |
+| T8 — Testes (limiares, alarmes, RFID, envio de dados) |   |   |   |   |   |   |   |   |   |    |    |    | ■  |    |
+| T9 — Documentação / apresentação |   |   |   |   |   |   |   |   |   |    |    |    |    | ■  |
 
 
 ## 10. Requisitos Funcionais (RF)
@@ -1116,3 +1116,22 @@ sólida e tecnicamente fundamentada.
 O módulo desenvolvido demonstra a aplicação prática de conceitos de análise de séries
 temporais, integrando-se de forma coerente no sistema global do PBL e contribuindo para a
 maturidade técnica do projeto.
+
+---
+
+## 22. Auto-avaliações 
+
+### César:
+
+Este projeto foi um desafio enorme, primeiro a trabalhar com novas farramentas e penso que foram compridos ao longo do tempo. Depois foi surgindo problemas técnicos na integração entre as diferentes tecnologias utilizadas que em grupo foi nos possivél ultrapassar. Aprendi imenso ao longo do semestre e sigo com uma bagagem reforçada com conhecimentos preciosos para o futuro. Este projeto concluido sinto que estarei mais preparado para futuros projetos sejam profissionais ou pessoais.
+
+### Bionda:
+
+Eu considero que os objetivos definidos para esta fase do projeto foram alcançados de forma satisfatória. Foi possível compreender o problema, definir uma solução adequada e selecionar os componentes necessários para a implementação do sistema proposto. Apesar de algumas dificuldades iniciais na integração dos diferentes elementos, o trabalho desenvolvido permitiu consolidar conhecimentos e criar uma base sólida para as próximas fases do projeto.
+
+### Alejandro:
+
+Trabalhar neste projeto foi um grande desafio. Tivemos de utilizar novas ferramentas e integrar diferentes tecnologias. Surgiram alguns problemas técnicos ao longo do caminho, mas superámo-los trabalhando em equipa e perseverando. Acredito que atingimos os objetivos que definimos. Ajudou-me a aprender mais e a tornar-me melhor na resolução de problemas. No final, este projeto preparou-me realmente para desafios futuros e os retos de trabalhar em equipa à distancia.
+
+
+
