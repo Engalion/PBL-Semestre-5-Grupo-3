@@ -257,27 +257,27 @@ Este conjunto de guiões cobre:
 ---
 
 
-# 4. Enquadramento nas Unidades Curriculares
+## 4. Enquadramento nas Unidades Curriculares
 
-## **4.1 Sistemas Distribuídos**
+### **4.1 Sistemas Distribuídos**
 
 * Planeamento do projeto.
 * Definição da arquitetura distribuída.
 * Comunicação ESP32 → REST → BD.
 
-## **4.2 Computação Física e IoT**
+### **4.2 Computação Física e IoT**
 
 * Programação do ESP32.
 * Integração de sensores e atuadores.
 * Envio de dados para servidor.
 
-## **4.3 Engenharia de Software**
+### **4.3 Engenharia de Software**
 
 * Especificação inicial dos requisitos.
 * Guiões de teste.
 * Modelação de sistema.
 
-## **4.4 Inteligência Artificial**
+### **4.4 Inteligência Artificial**
 
 * Recolha e tratamento de dados.
 * Integração com fonte externa.
@@ -285,9 +285,9 @@ Este conjunto de guiões cobre:
 
 ---
 
-# 5. Requisitos Técnicos e Tecnologias
+## 5. Requisitos Técnicos e Tecnologias
 
-## **Hardware (preliminar)**
+### **Hardware (preliminar)**
 
 * Esp32 Dev Kit
 * Breadboard 
@@ -303,7 +303,7 @@ Este conjunto de guiões cobre:
 * Leitor RFID RC522
 * Cartão/Tag RFID compatível
 
-## **Software**
+### **Software**
 
 * Arduino Ide
 * Python ide
@@ -312,7 +312,7 @@ Este conjunto de guiões cobre:
 
 ---
 
-# 6. Arquitetura da Solução (Provisória)
+## 6. Arquitetura da Solução (Provisória)
 
 ```
 [Sensores] → ESP32 → API REST → Base de Dados → Dashboard / IA
@@ -325,7 +325,7 @@ Este conjunto de guiões cobre:
 
 ---
 
-# 7. Esboço Físico do Artefacto
+## 7. Esboço Físico do Artefacto
 
 * Caixa com ESP32.
 * Entrada USB para alimentação.
@@ -340,7 +340,7 @@ Este conjunto de guiões cobre:
 
 ---
 
-# 8. Lista Preliminar de Material
+## 8. Lista Preliminar de Material
 
 * ESP32 – 1
 * DHT22 – 1
@@ -356,9 +356,9 @@ Este conjunto de guiões cobre:
 
 ---
 
-# 9. Planeamento e Calendarização Inicial
+## 9. Planeamento e Calendarização Inicial
 
-## **1) Tarefas Principais**
+# **1) Tarefas Principais**
 
 | Tarefa | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 |
 |-------|---|---|---|---|---|---|---|---|---|----|----|----|----|----|
@@ -372,7 +372,7 @@ Este conjunto de guiões cobre:
 | T8 — Testes (limiares, alarmes, RFID, envio de dados) |   |   |   |   |   |   |   |   |   |    |    |    | ■  |    |
 | T9 — Documentação / apresentação |   |   |   |   |   |   |   |   |   |    |    |    |    | ■  |
 
-## **2) Distribuição de tarefas pelos 3 elementos**
+# **2) Distribuição de tarefas pelos 3 elementos**
 
 | Tarefa | Alejandro Agrela | Bionda Mateus | César Pinto |
 |-------|------------------|---------------|-------------|
@@ -732,6 +732,11 @@ A arquitetura é dividida em três camadas:
 
 ## 18. Fotos do Artefacto.
 
+![WhatsApp Image 2026-02-06 at 18 39 05](https://github.com/user-attachments/assets/fdef094f-8bbb-4cf1-ae11-6527e3a67047)
+
+![WhatsApp Image 2026-02-06 at 18 39 05(1)](https://github.com/user-attachments/assets/d8823432-5462-450a-a6c0-21261143b49a)
+
+![WhatsApp Image 2026-02-06 at 18 39 05(2)](https://github.com/user-attachments/assets/cbe94ed8-c015-407c-8bb7-a4d093abf112)
 
 ---
 
@@ -1146,5 +1151,10 @@ Eu considero que os objetivos definidos para esta fase do projeto foram alcança
 
 Trabalhar neste projeto foi um grande desafio. Tivemos de utilizar novas ferramentas e integrar diferentes tecnologias. Surgiram alguns problemas técnicos ao longo do caminho, mas superámo-los trabalhando em equipa e perseverando. Acredito que atingimos os objetivos que definimos. Ajudou-me a aprender mais e a tornar-me melhor na resolução de problemas. No final, este projeto preparou-me realmente para desafios futuros e os retos de trabalhar em equipa à distancia.
 
+---
+
+23. Poster.
+
+![WhatsApp Image 2026-02-06 at 18 34 52](https://github.com/user-attachments/assets/b9512a0e-6e13-4ea7-ac79-51217318f5b1)
 
 
