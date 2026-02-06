@@ -358,7 +358,7 @@ Este conjunto de guiões cobre:
 
 # 9. Planeamento e Calendarização Inicial
 
-## **Tarefas Principais**
+## **1) Tarefas Principais**
 
 | Tarefa | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 |
 |-------|---|---|---|---|---|---|---|---|---|----|----|----|----|----|
@@ -372,6 +372,19 @@ Este conjunto de guiões cobre:
 | T8 — Testes (limiares, alarmes, RFID, envio de dados) |   |   |   |   |   |   |   |   |   |    |    |    | ■  |    |
 | T9 — Documentação / apresentação |   |   |   |   |   |   |   |   |   |    |    |    |    | ■  |
 
+## **2) Distribuição de tarefas pelos 3 elementos**
+
+| Tarefa | Alejandro Agrela | Bionda Mateus | César Pinto |
+|-------|------------------|---------------|-------------|
+| T1 — Definição do problema e objetivos | 35% | 35% | 30% |
+| T2 — Seleção de sensores e componentes | 25% | 30% | 45% |
+| T3 — Protótipo ESP32 (ESP32 + PIR + DHT + OLED + buzzer + LED RGB + RFID) | 30% | 45% | 25% |
+| T4 — API REST (leituras JSON, validação e resposta) | 55% | 20% | 25% |
+| T5 — Base de dados (tabelas, inserts, testes, ligação API) | 45% | 20% | 35% |
+| T6 — IA: recolha / tratamento (preparação dataset) | 20% | 20% | 60% |
+| T7 — IA: treino / validação (ARIMA / modelo + previsão) | 15% | 15% | 70% |
+| T8 — Testes (limiares, alarmes, RFID, envio de dados) | 25% | 40% | 25% |
+| T9 — Documentação / apresentação | 35% | 30% | 35% |
 
 ## 10. Requisitos Funcionais (RF)
 
