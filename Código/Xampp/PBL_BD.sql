@@ -1,0 +1,34 @@
+CREATE DATABASE IF NOT EXISTS datacenter;
+USE datacenter;
+
+CREATE TABLE IF NOT EXISTS sensores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo ENUM('movimento','temperatura','humidade') NOT NULL,
+    valor FLOAT DEFAULT NULL,
+    data_hora DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS acessos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario VARCHAR(50),
+    estado ENUM('entrada','saida','nao_autorizado') NOT NULL,
+    data_hora DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role ENUM('admin','user') NOT NULL DEFAULT 'user',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS user_cards (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  rfid_uid VARCHAR(32) NOT NULL UNIQUE,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
