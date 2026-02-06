@@ -1153,8 +1153,12 @@ Trabalhar neste projeto foi um grande desafio. Tivemos de utilizar novas ferrame
 
 ---
 
-23. Poster.
+## 23. Poster.
 
 ![WhatsApp Image 2026-02-06 at 18 34 52](https://github.com/user-attachments/assets/b9512a0e-6e13-4ea7-ac79-51217318f5b1)
 
+---
 
+## 24. Link do video.
+
+https://drive.google.com/file/d/11PtyIs9Z7H9E3uHsKwLOZpmRUsZ7SUuR/view?usp=sharing
