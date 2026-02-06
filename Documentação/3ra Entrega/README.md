@@ -1,4 +1,4 @@
-# Proposta Inicial do Projeto
+# Proposta Final do Projeto
 
 ## Universidade **IADE**
 
